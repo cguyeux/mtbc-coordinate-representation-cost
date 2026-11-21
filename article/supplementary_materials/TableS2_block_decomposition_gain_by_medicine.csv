@@ -1,0 +1,12 @@
+medicine,gain_points_C0,ci_low_C0,ci_high_C0,gain_points_C1,ci_low_C1,ci_high_C1
+Isoniazid,0.99,0.44,2.32,0.0,0.0,0.0
+Rifampicin,0.26,0.04,0.92,0.0,0.0,0.0
+Ethambutol,0.0,0.0,0.0,0.0,0.0,0.0
+Pyrazinamide,0.0,0.0,0.0,0.0,0.0,0.0
+Moxifloxacin,57.37,29.32,63.33,13.2,7.86,15.65
+Levofloxacin,49.96,24.08,57.44,11.75,6.25,13.31
+Streptomycin,0.15,0.0,0.22,0.0,0.0,0.0
+Ethionamide,0.03,0.0,0.16,0.0,0.0,0.0
+Amikacin,0.0,0.0,0.0,0.0,0.0,0.0
+Kanamycin,0.0,0.0,0.0,0.0,0.0,0.0
+Capreomycin,0.0,0.0,0.0,0.0,0.0,0.0

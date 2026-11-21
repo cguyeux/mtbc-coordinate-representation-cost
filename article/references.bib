@@ -1,0 +1,256 @@
+% Toutes les entrées de ce fichier ont été vérifiées contre la notice officielle CrossRef
+% (resolution du DOI, comparaison du titre, du support et de la liste d'auteurs) le 2026-11-14,
+% passe P7.2. Le dépôt de données CRyPTIC élargi a été vérifié contre l'API Zenodo.
+% Les deux entrées ajoutées le 2026-11-16 (P7.8) `tan2015` et `holmes2020` ont été vérifiées
+% de la même façon (CrossRef : titre, support, volume, pages, auteurs). Les deux entrées
+% logicielles `piezo` et `gnomonicus` n'ont PAS de DOI : aucune notice n'existe dans CrossRef
+% ni dans Zenodo au 2026-11-16 ; elles portent l'URL du dépôt public et le commit lu.
+% Les quatre entrées ajoutées le 2026-11-16 (P7.11) `srinivasan2021`, `wang2020`, `repun2024` et
+% `peng2026` ont été vérifiées contre CrossRef le même jour (titre, support, volume, numéro, pages
+% ou numéro d'article, année, liste d'auteurs) ; `repun2024` porte l'année 2024 que donnent CrossRef
+% (published-print 2024-11-22) et Europe PMC (printPublicationDate 2024-11-01) pour le volume 26(1).
+% L'entrée `kruuner2006` (Krüüner, Yates, Drobniewski, J Clin Microbiol 44(3):811-818, 2006,
+% doi 10.1128/jcm.44.3.811-818.2006) a été RETIRÉE le 2026-11-16 (P7.11) : elle soutenait la
+% discussion des concentrations critiques de la cohorte de Samara, que P7.8 a retirée du manuscrit,
+% et aucune affirmation du texte actuel n'en dépend. `casali2014` est au contraire conservée et
+% désormais citée : elle est la provenance des étiquettes PATRIC de la moxifloxacine, de l'amikacine
+% et de la capréomycine (PRJEB2138, mesuré en P8.7).
+% Les trois entrées ajoutées le 2026-11-21 (P7.16) `westhead2025`, `drprg2023` et `hong2026` ont été
+% vérifiées le même jour de DEUX façons indépendantes : contre la notice CrossRef (résolution du DOI,
+% titre, support, volume, numéro, numéro d'article ou pages, année, liste complète des auteurs) et
+% contre le miroir local du corpus PubMed tuberculose du service tbmonitor (titre, DOI, revue, date
+% de publication, PMID, résumé lu en entier). `westhead2025` porte 17 auteurs, dont le dernier est
+% l'auteur de `piezo` et de `gnomonicus` ; `drprg2023` en porte 4, dont le dernier est l'auteur de
+% Mykrobe (`hunt2019`). Pour `Microbial Genomics`, le numéro d'article est le suffixe du DOI, qui est
+% l'usage de pagination de cette revue. Protocole de la recherche qui les a trouvées, avec ses
+% requêtes verbatim et ses comptes : `résultats/p716_anteriorite.md`.
+% Registre : article/claim_check.md ; magasin partagé : skill biblio.
+
+@techreport{who2023,
+  title={Catalogue of mutations in Mycobacterium tuberculosis complex and their association with drug resistance, second edition},
+  author={{World Health Organization}},
+  institution={World Health Organization},
+  address={Geneva},
+  year={2023},
+  note={ISBN 978-92-4-008241-0}
+}
+
+@article{phelan2019,
+  title={Integrating informatics tools and portable sequencing technology for rapid detection of resistance to anti-tuberculous drugs},
+  author={Phelan, Jody E. and O'Sullivan, Denise M. and Machado, Diana and Ramos, Jorge and Oppong, Yaa E. A. and Campino, Susana and O'Grady, Justin and McNerney, Ruth and Hibberd, Martin L. and Viveiros, Miguel and Huggett, Jim F. and Clark, Taane G.},
+  journal={Genome Medicine},
+  volume={11},
+  number={1},
+  pages={41},
+  year={2019},
+  doi={10.1186/s13073-019-0650-x}
+}
+
+@article{verboven2022,
+  title={TBProfiler for automated calling of the association with drug resistance of variants in Mycobacterium tuberculosis},
+  author={Verboven, Lennert and Phelan, Jody and Heupink, Tim H. and Van Rie, Annelies},
+  journal={PLOS ONE},
+  volume={17},
+  number={12},
+  pages={e0279644},
+  year={2022},
+  doi={10.1371/journal.pone.0279644}
+}
+
+@article{hunt2019,
+  title={Antibiotic resistance prediction for Mycobacterium tuberculosis from genome sequence data with Mykrobe},
+  author={Hunt, Martin and Bradley, Phelim and Lapierre, Simon Grandjean and Heys, Simon and Thomsit, Mark and Hall, Michael B. and Malone, Kerri M. and Wintringer, Penelope and Walker, Timothy M. and Cirillo, Daniela M. and Comas, I{\~n}aki and Farhat, Maha R. and Fowler, Phillip and Gardy, Jennifer and Ismail, Nazir and Kohl, Thomas A. and Mathys, Vanessa and Merker, Matthias and Niemann, Stefan and Omar, Shaheed Vally and Sintchenko, Vitali and Smith, Grace and van Soolingen, Dick and Supply, Philip and Tahseen, Sabira and Wilcox, Mark and Arandjelovic, Irena and Peto, Tim E. A. and Crook, Derrick W. and Iqbal, Zamin},
+  journal={Wellcome Open Research},
+  volume={4},
+  pages={191},
+  year={2019},
+  doi={10.12688/wellcomeopenres.15603.1}
+}
+
+@article{groschel2021,
+  title={GenTB: A user-friendly genome-based predictor for tuberculosis resistance powered by machine learning},
+  author={Gr{\"o}schel, Matthias I. and Owens, Martin and Freschi, Luca and Vargas, Roger and Marin, Maximilian G. and Phelan, Jody and Iqbal, Zamin and Dixit, Avika and Farhat, Maha R.},
+  journal={Genome Medicine},
+  volume={13},
+  number={1},
+  pages={138},
+  year={2021},
+  doi={10.1186/s13073-021-00953-4}
+}
+
+@article{cryptic2022,
+  title={A data compendium associating the genomes of 12,289 Mycobacterium tuberculosis isolates with quantitative resistance phenotypes to 13 antibiotics},
+  author={{The CRyPTIC Consortium}},
+  journal={PLOS Biology},
+  volume={20},
+  number={8},
+  pages={e3001721},
+  year={2022},
+  doi={10.1371/journal.pbio.3001721}
+}
+
+@misc{cryptic2026dataset,
+  title={The CRyPTIC Consortium Dataset},
+  author={{The CRyPTIC Consortium} and Fowler, Philip},
+  year={2026},
+  publisher={Zenodo},
+  version={v3.4.1},
+  note={CC-BY-4.0; publié le 2026-09-12},
+  doi={10.5281/zenodo.22128395}
+}
+
+@article{coll2018,
+  title={Genome-wide analysis of multi- and extensively drug-resistant Mycobacterium tuberculosis},
+  author={Coll, Francesc and Phelan, Jody and Hill-Cawthorne, Grant A. and Nair, Mridul B. and Mallard, Kim and Ali, Shahjahan and Abdallah, Abdallah M. and Alghamdi, Saad and Alsomali, Mona and Ahmed, Abdallah O. and Portelli, Stephanie and Oppong, Yaa and Alves, Adriana and Bessa, Theolis Barbosa and Campino, Susana and Caws, Maxine and Chatterjee, Anirvan and Crampin, Amelia C. and Dheda, Keertan and Furnham, Nicholas and Glynn, Judith R. and Grandjean, Louis and Minh Ha, Dang and Hasan, Rumina and Hasan, Zahra and Hibberd, Martin L. and Joloba, Moses and Jones-L{\'o}pez, Edward C. and Matsumoto, Tomoshige and Miranda, Anabela and Moore, David J. and Mocillo, Nora and Panaiotov, Stefan and Parkhill, Julian and Penha, Carlos and Perdig{\~a}o, Jo{\~a}o and Portugal, Isabel and Rchiad, Zineb and Robledo, Jaime and Sheen, Patricia and Shesha, Nashwa Talaat and Sirgel, Frik A. and Sola, Christophe and Oliveira Sousa, Erivelton and Streicher, Elizabeth M. and van Helden, Paul and Viveiros, Miguel and Warren, Robert M. and McNerney, Ruth and Pain, Arnab and Clark, Taane G.},
+  journal={Nature Genetics},
+  volume={50},
+  number={2},
+  pages={307--316},
+  year={2018},
+  doi={10.1038/s41588-017-0029-0}
+}
+
+@article{casali2014,
+  title={Evolution and transmission of drug-resistant tuberculosis in a Russian population},
+  author={Casali, Nicola and Nikolayevskyy, Vladyslav and Balabanova, Yanina and Harris, Simon R. and Ignatyeva, Olga and Kontsevaya, Irina and Corander, Jukka and Bryant, Josephine and Parkhill, Julian and Nejentsev, Sergey and Horstmann, Rolf D. and Brown, Timothy and Drobniewski, Francis},
+  journal={Nature Genetics},
+  volume={46},
+  number={3},
+  pages={279--286},
+  year={2014},
+  doi={10.1038/ng.2878}
+}
+
+@article{srinivasan2021,
+  title={Misannotated multi-nucleotide variants in public cancer genomics datasets lead to inaccurate mutation calls with significant implications},
+  author={Srinivasan, Sujaya and Kalinava, Natallia and Aldana, Rafael and Li, Zhipan and van Hagen, Sjoerd and Rodenburg, Sander Y. A. and Wind-Rotolo, Megan and Qian, Xiaozhong and Sasson, Ariella S. and Tang, Hao and Kirov, Stefan},
+  journal={Cancer Research},
+  volume={81},
+  number={2},
+  pages={282--288},
+  year={2021},
+  doi={10.1158/0008-5472.CAN-20-2151}
+}
+
+@article{wang2020,
+  title={Landscape of multi-nucleotide variants in 125,748 human exomes and 15,708 genomes},
+  author={Wang, Qingbo and Pierce-Hoffman, Emma and Cummings, Beryl B. and Alf{\"o}ldi, Jessica and Francioli, Laurent C. and Gauthier, Laura D. and Hill, Andrew J. and O'Donnell-Luria, Anne H. and Karczewski, Konrad J. and MacArthur, Daniel G. and {Genome Aggregation Database Consortium}},
+  journal={Nature Communications},
+  volume={11},
+  number={1},
+  pages={2539},
+  year={2020},
+  doi={10.1038/s41467-019-12438-5}
+}
+
+@article{repun2024,
+  title={Repun: an accurate small variant representation unification method for multiple sequencing platforms},
+  author={Zheng, Zhenxian and Ren, Yingxuan and Chen, Lei and Wong, Angel On Ki and Li, Shumin and Yu, Xian and Lam, Tak-Wah and Luo, Ruibang},
+  journal={Briefings in Bioinformatics},
+  volume={26},
+  number={1},
+  pages={bbae613},
+  year={2024},
+  doi={10.1093/bib/bbae613}
+}
+
+@article{peng2026,
+  title={Algorithmic determinants of performance heterogeneity in whole-genome sequencing-based prediction of drug resistance in Mycobacterium tuberculosis: a systematic review and meta-analysis},
+  author={Peng, Baozhen and Zhou, Yang and Li, Xiangchen and Liu, Huihui and Zhao, Bing and Hou, Ping and Ou, Xichao and Zhao, Yanlin},
+  journal={Microorganisms},
+  volume={14},
+  number={8},
+  pages={1824},
+  year={2026},
+  doi={10.3390/microorganisms14081824}
+}
+
+@article{tan2015,
+  title={Unified representation of genetic variants},
+  author={Tan, Adrian and Abecasis, Gon{\c{c}}alo R. and Kang, Hyun Min},
+  journal={Bioinformatics},
+  volume={31},
+  number={13},
+  pages={2202--2204},
+  year={2015},
+  doi={10.1093/bioinformatics/btv112}
+}
+
+@article{holmes2020,
+  title={{SPDI}: data model for variants and applications at {NCBI}},
+  author={Holmes, J. Bradley and Moyer, Eric and Phan, Lon and Maglott, Donna and Kattman, Brandi},
+  journal={Bioinformatics},
+  volume={36},
+  number={6},
+  pages={1902--1907},
+  year={2020},
+  doi={10.1093/bioinformatics/btz856}
+}
+
+@misc{piezo,
+  title={piezo: a {Python} module for parsing and applying antimicrobial resistance catalogues},
+  author={{Oxford Modernising Medical Microbiology group}},
+  howpublished={\url{https://github.com/oxfordmmm/piezo}},
+  note={commit 0ffab6de, read 2026-11-16; grammar specification NOMENCLATURE.md},
+  year={2026}
+}
+
+@misc{gnomonicus,
+  title={gnomonicus: applying a resistance catalogue to a genome},
+  author={{Oxford Modernising Medical Microbiology group}},
+  howpublished={\url{https://github.com/oxfordmmm/gnomonicus}},
+  note={commit e59af2df, read 2026-11-16},
+  year={2026}
+}
+
+@article{senelle2023,
+  title={Towards the reconstruction of a global TB history using a new pipeline ``TB-Annotator''},
+  author={Senelle, Gaetan and Sahal, Muhammed Rabiu and La, Kevin and Billard-Pomares, Typhaine and Marin, Julie and Mougari, Faiza and Bridier-Nahmias, Antoine and Carbonnelle, Etienne and Cambau, Emmanuelle and Refr{\'e}gier, Guislaine and Guyeux, Christophe and Sola, Christophe},
+  journal={Tuberculosis},
+  volume={143},
+  pages={102376},
+  year={2023},
+  doi={10.1016/j.tube.2023.102376}
+}
+
+@article{westhead2025,
+  author  = {Westhead, Jeremy and Baker, Catriona S. and Brouard, Marc and Colpus, Matthew and
+             Constantinides, Bede and Hall, Alexandra and Knaggs, Jeff and Alves, Marcela Lopes and
+             Spies, Ruan and Thai, Hieu and Surrall, Sarah and Govender, Kumeren and
+             Peto, Timothy E. A. and Crook, Derrick W. and Omar, Shaheed V. and Turner, Robert and
+             Fowler, Philip W.},
+  title   = {Characterizing the performance of an antibiotic resistance prediction tool,
+             gnomonicus, using a diverse test set of 2,663 {Mycobacterium} tuberculosis samples},
+  journal = {Microbial Genomics},
+  year    = {2025},
+  volume  = {11},
+  number  = {12},
+  pages   = {001592},
+  doi     = {10.1099/mgen.0.001592}
+}
+
+@article{drprg2023,
+  author  = {Hall, Michael B. and Lima, Leandro and Coin, Lachlan J. M. and Iqbal, Zamin},
+  title   = {Drug resistance prediction for {Mycobacterium} tuberculosis with reference graphs},
+  journal = {Microbial Genomics},
+  year    = {2023},
+  volume  = {9},
+  number  = {8},
+  pages   = {001081},
+  doi     = {10.1099/mgen.0.001081}
+}
+
+@article{hong2026,
+  author  = {Hong, Ruimin and Xu, Peng and Lai, Wenjie and Wu, Chi and Zhang, Xuecong and
+             Chen, Shan and Li, Dan and Cai, Juanjia and Takiff, Howard and Qu, Jiuxin and
+             Gao, Qian},
+  title   = {Discrepancy between {WGS}-based genotypic and phenotypic drug susceptibility testing
+             of first and second-line drugs for {Mycobacterium} tuberculosis: Limited impact of
+             unknown resistance mechanisms},
+  journal = {International Journal of Antimicrobial Agents},
+  year    = {2026},
+  volume  = {67},
+  number  = {1},
+  pages   = {107666},
+  doi     = {10.1016/j.ijantimicag.2025.107666}
+}

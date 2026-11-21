@@ -1,0 +1,67 @@
+indicateur	valeur	detail
+lignes_C0_vivant	64052	
+lignes_controle_rejoue	64052	
+lignes_controle_absentes_de_C0	0	
+lignes_C0_absentes_du_controle	0	
+controle_identique_en_ensemble	1	
+lignes_C1_blocs	204522	x3.19 de C0
+lignes_C0_absentes_de_C1	0	doit valoir 0 : C1 ⊇ C0
+lignes_ajoutees_par_C1	140470	
+types_spdi_C0	52041	snp
+types_spdi_C0	10198	indel
+types_spdi_C0	1041	sans_spdi
+types_spdi_C0	772	mnv
+types_spdi_R_associe_C0	5082	indel
+types_spdi_R_associe_C0	2743	snp
+types_spdi_R_associe_C0	134	mnv
+types_spdi_R_associe_C0	128	sans_spdi
+spdi_distincts_C0	37781	
+spdi_distincts_R_associes_C0	4242	
+types_spdi_C1	130231	mnv
+types_spdi_C1	52041	snp
+types_spdi_C1	21209	indel
+types_spdi_C1	1041	sans_spdi
+types_spdi_R_associe_C1	18053	mnv
+types_spdi_R_associe_C1	10703	indel
+types_spdi_R_associe_C1	2743	snp
+types_spdi_R_associe_C1	128	sans_spdi
+spdi_distincts_C1	115097	
+spdi_distincts_R_associes_C1	23958	
+ajoutees_par_source_et_medicament	17925	WHO_catalogue | clofazimine
+ajoutees_par_source_et_medicament	15992	WHO_catalogue | rifampicin
+ajoutees_par_source_et_medicament	14821	WHO_catalogue | isoniazid
+ajoutees_par_source_et_medicament	13188	WHO_catalogue | ethambutol
+ajoutees_par_source_et_medicament	11025	WHO_catalogue | delamanid
+ajoutees_par_source_et_medicament	9423	WHO_catalogue | capreomycin
+ajoutees_par_source_et_medicament	8347	WHO_catalogue | bedaquiline
+ajoutees_par_source_et_medicament	7123	WHO_catalogue | streptomycin
+ajoutees_par_source_et_medicament	6563	WHO_catalogue | levofloxacin
+ajoutees_par_source_et_medicament	6361	WHO_catalogue | kanamycin
+ajoutees_par_source_et_medicament	6331	WHO_catalogue | amikacin
+ajoutees_par_source_et_medicament	6299	WHO_catalogue | ethionamide
+ajoutees_par_source_et_medicament	5851	WHO_catalogue | moxifloxacin
+ajoutees_par_source_et_medicament	5546	WHO_catalogue | pyrazinamide
+ajoutees_par_source_et_medicament	3097	WHO_catalogue | linezolid
+ajoutees_par_source_et_medicament	797	tbprofiler | pyrazinamide
+ajoutees_par_source_et_medicament	390	tbprofiler | isoniazid
+ajoutees_par_source_et_medicament	325	tbprofiler | rifampicin
+ajoutees_par_source_et_medicament	255	tbprofiler | ethionamide
+ajoutees_par_source_et_medicament	182	tbprofiler | ethambutol
+ajoutees_par_source_et_medicament	180	tbprofiler | streptomycin
+ajoutees_par_source_et_medicament	96	tbprofiler | capreomycin
+ajoutees_par_source_et_medicament	93	tbprofiler | levofloxacin
+ajoutees_par_source_et_medicament	93	tbprofiler | moxifloxacin
+ajoutees_par_source_et_medicament	83	tbprofiler | bedaquiline
+ajoutees_par_verdict	99103	uncertain
+ajoutees_par_verdict	23540	R-associated
+ajoutees_par_verdict	17827	S-associated
+ajoutees_par_type	129459	mnv
+ajoutees_par_type	11011	indel
+conflits_R_S_meme_spdi_meme_medicament_C0	0	
+conflits_R_S_meme_spdi_meme_medicament_C1	19	
+bloc_gyrA_7581_ACAG_GCAC_C1	R-associated	gyrA_p.Asp94Gly | levofloxacin | WHO_catalogue | 1) Assoc w R
+bloc_gyrA_7581_ACAG_GCAC_C1	S-associated	gyrA_p.Ser95Thr | levofloxacin | WHO_catalogue | 5) Not assoc w R
+bloc_gyrA_7581_ACAG_GCAC_C1	R-associated	gyrA_p.Asp94Gly | levofloxacin | tbprofiler | Assoc w R
+bloc_gyrA_7581_ACAG_GCAC_C1	R-associated	gyrA_p.Asp94Gly | moxifloxacin | WHO_catalogue | 1) Assoc w R
+bloc_gyrA_7581_ACAG_GCAC_C1	S-associated	gyrA_p.Ser95Thr | moxifloxacin | WHO_catalogue | 5) Not assoc w R
+bloc_gyrA_7581_ACAG_GCAC_C1	R-associated	gyrA_p.Asp94Gly | moxifloxacin | tbprofiler | Assoc w R

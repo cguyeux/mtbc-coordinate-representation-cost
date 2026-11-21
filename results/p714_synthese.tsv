@@ -1,0 +1,95 @@
+indicateur	valeur
+souches_cohorte	50782
+paires_etiquetees_11_medicaments	237887
+souches_phenotypees	41551
+paires_source_CRyPTIC_v3	121620
+paires_source_CRyPTIC	93007
+paires_source_TBannotator_biosample	20704
+paires_source_Coll2018	1798
+paires_source_PATRIC	735
+paires_source_literature	23
+sources_de_table_representees	6
+paires_cryptic_v3	121620
+dst_sources_retrouvees_dans_les_paires_cryptic_v3	11
+paires_cryptic_v3_dst_NEJM2018	42955
+paires_cryptic_v3_dst_CLIRES2020	22093
+paires_cryptic_v3_dst_KMVALIDATION2025	20465
+paires_cryptic_v3_dst_PHE2019	11041
+paires_cryptic_v3_dst_CRyPTIC	7957
+paires_cryptic_v3_dst_LID2015	7118
+paires_cryptic_v3_dst_SEQTREAT2020	3708
+paires_cryptic_v3_dst_WHO2019	2582
+paires_cryptic_v3_dst_CLIRES2023	2424
+paires_cryptic_v3_dst_MUMBAI2018	829
+paires_cryptic_v3_dst_KMMYKROBE2025	448
+bioprojects_distincts	138
+paires_sans_bioproject	0
+INH_plus_grande_etude_S	PRJNA1237251 (0.2426, n=6152)
+INH_plus_grande_etude_R	PRJEB41116 (0.1159, n=1537)
+INH_part_PRJNA1237251_S	0.2426
+INH_n_PRJNA1237251_S	6152
+INH_part_PRJNA1237251_R	0.0564
+RIF_plus_grande_etude_S	PRJNA1237251 (0.2392, n=6858)
+RIF_plus_grande_etude_R	PRJEB41116 (0.1350, n=1353)
+RIF_part_PRJNA1237251_S	0.2392
+RIF_n_PRJNA1237251_S	6858
+RIF_part_PRJNA1237251_R	0.0061
+EMB_plus_grande_etude_S	PRJNA1237251 (0.2196, n=6839)
+EMB_plus_grande_etude_R	PRJEB41116 (0.1248, n=700)
+EMB_part_PRJNA1237251_S	0.2196
+EMB_n_PRJNA1237251_S	6839
+EMB_part_PRJNA1237251_R	0.0084
+PZA_plus_grande_etude_S	PRJEB25991 (0.1965, n=2547)
+PZA_plus_grande_etude_R	PRJEB41199 (0.1078, n=312)
+PZA_part_PRJNA1237251_S	0.0
+PZA_n_PRJNA1237251_S	0
+PZA_part_PRJNA1237251_R	0.0
+MXF_plus_grande_etude_S	PRJEB41116 (0.1790, n=2672)
+MXF_plus_grande_etude_R	PRJEB41116 (0.4112, n=1199)
+MXF_part_PRJNA1237251_S	0.0
+MXF_n_PRJNA1237251_S	0
+MXF_part_PRJNA1237251_R	0.0
+LEV_plus_grande_etude_S	PRJEB41199 (0.1610, n=1768)
+LEV_plus_grande_etude_R	PRJEB41116 (0.2494, n=588)
+LEV_part_PRJNA1237251_S	0.0
+LEV_n_PRJNA1237251_S	0
+LEV_part_PRJNA1237251_R	0.0
+AMK_plus_grande_etude_S	PRJEB41116 (0.1944, n=3460)
+AMK_plus_grande_etude_R	PRJEB41116 (0.1399, n=231)
+AMK_part_PRJNA1237251_S	0.0
+AMK_n_PRJNA1237251_S	0
+AMK_part_PRJNA1237251_R	0.0
+KAN_plus_grande_etude_S	PRJEB41116 (0.2183, n=3711)
+KAN_plus_grande_etude_R	PRJEB41116 (0.1814, n=353)
+KAN_part_PRJNA1237251_S	0.0
+KAN_n_PRJNA1237251_S	0
+KAN_part_PRJNA1237251_R	0.0
+STM_plus_grande_etude_S	PRJNA413593 (0.1651, n=1262)
+STM_plus_grande_etude_R	PRJEB2138 (0.1206, n=481)
+STM_part_PRJNA1237251_S	0.0
+STM_n_PRJNA1237251_S	0
+STM_part_PRJNA1237251_R	0.0
+ETH_plus_grande_etude_S	PRJEB41116 (0.1932, n=2649)
+ETH_plus_grande_etude_R	PRJEB41116 (0.3299, n=1076)
+ETH_part_PRJNA1237251_S	0.0
+ETH_n_PRJNA1237251_S	0
+ETH_part_PRJNA1237251_R	0.0
+CAP_plus_grande_etude_S	PRJEB41116 (0.4157, n=3661)
+CAP_plus_grande_etude_R	PRJEB41116 (0.2089, n=207)
+CAP_part_PRJNA1237251_S	0.0
+CAP_n_PRJNA1237251_S	0
+CAP_part_PRJNA1237251_R	0.0
+controle_souches_phenotypees_attendues_P76	41551
+controle_souches_phenotypees_ok	1
+controle_ecart_n_R_n_S_INH	0,0
+controle_ecart_n_R_n_S_RIF	0,0
+controle_ecart_n_R_n_S_EMB	0,0
+controle_ecart_n_R_n_S_PZA	0,0
+controle_ecart_n_R_n_S_MXF	0,0
+controle_ecart_n_R_n_S_LEV	0,0
+controle_ecart_n_R_n_S_AMK	0,0
+controle_ecart_n_R_n_S_KAN	0,0
+controle_ecart_n_R_n_S_STM	0,0
+controle_ecart_n_R_n_S_ETH	0,0
+controle_ecart_n_R_n_S_CAP	0,0
+controle_effectifs_par_medicament_ok	1

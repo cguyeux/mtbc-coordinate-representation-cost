@@ -1,0 +1,165 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+
+\title{Supplementary material to \textit{Measured cost of keeping one coordinate representation
+per variant when ingesting a drug-resistance catalogue of the \textit{Mycobacterium
+tuberculosis} complex}}
+\author{Christophe Guyeux}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Supplementary Note S1: protocol of the search for a published measurement}
+
+\textbf{Database.} A local mirror of the PubMed tuberculosis corpus, queried in read-only SQL
+on 21 November 2026. Its state was measured on that day rather than taken from an earlier
+record: 332\,784 records, the earliest published in April 1848 and the most recent on 20
+November 2026, plus 6\,968 abstracts recovered from an open bibliographic source for records
+that PubMed carries without one. Every query reads the title and the abstract in lower case,
+the abstract being taken from the PubMed field or, when it is empty, from the recovered one.
+
+\textbf{Criterion of inclusion.} A record is retained if it measures, in points of sensitivity
+or specificity of a genotypic prediction of resistance, the effect of a choice of variant
+representation or of coordinate conversion of a catalogue. A record that describes the
+phenomenon, proposes a remedy, compares the performance of two tools without varying the
+representation, or measures an effect on another criterion, is set aside with its reason.
+
+\textbf{Queries and counts.} Seven queries were run as substring matches on the title and the
+abstract. Q1, multi-nucleotide variants: 0 records. Q2, variant normalisation, representation
+or left alignment: 0. Q3, HGVS notation: 1. Q4, \textit{gyrA} together with haplotype, phasing
+or Ser95Thr: 14. Q5, catalogue together with coordinate or ingestion: 3. Q6, comparison or
+concordance of prediction tools, naming TB-Profiler, Mykrobe, gnomonicus, PhyResSE or SAM-TB:
+51. Q7, representation or notation together with sensitivity and drug resistance: 6. The 75
+records were screened on their titles; none satisfies the criterion. The verbatim text of the
+seven queries is given with the measurement outputs.
+
+\textbf{Candidates read in full and reason for setting each aside.} Verboven et
+al. \cite{verboven2022}, the single record of Q3: a design choice, emitting every
+representation of an indel, without a measurement in points of sensitivity, and bearing on
+indels where 92.2\,\% of the representations dropped here are blocks. Westhead et
+al. \cite{westhead2025}: compares two implementations at a fixed representation. Hall et
+al. \cite{drprg2023}: a reference-graph strategy that dissolves the question instead of
+measuring it. Three further comparisons of tools (doi 10.1186/s13073-025-01458-0, five tools
+on 36\,385 isolates; doi 10.1007/s00284-025-04530-5; doi 10.1371/journal.pgph.0004465, a
+network meta-analysis of nine tools): compare tools, not representations. Hong et
+al. \cite{hong2026}: partitions genotype-phenotype discordance without bearing on
+representation, and supports the closing sentence of the Discussion instead.
+
+\textbf{Limits of this search.} The queries match the title and the abstract, so a work that
+named the phenomenon only in its body text escapes this mirror; the full-text search indexed
+by Europe PMC run during an earlier pass covered that gap, but its queries were not kept
+verbatim and are not reproduced here. The mirror is a tuberculosis corpus, so the works of
+method published outside that field which the Discussion cites
+\cite{srinivasan2021,wang2020,repun2024,tan2015} come from elsewhere. The axis of Q6, which
+is the most productive of the seven, was absent from the earlier pass.
+
+\section*{Supplementary Note S2: commits and files of the three implementations read}
+
+The matching strategies described in the Results section on published implementations were
+read in the public source code of the tools, in the state of their repositories on 16
+November 2026: the library \texttt{pathogen-profiler}, which carries the matching and
+annotation code of TB-Profiler, at commit \texttt{ec7dc55} (files \texttt{mutation\_db.py},
+\texttt{vcf.py}, \texttt{profiler.py} and \texttt{combine\_vcf\_variants.py}); Mykrobe
+\cite{hunt2019} at commit \texttt{110b4c76} (file \texttt{models.py} of the gene annotation
+module); and piezo \cite{piezo} at commit \texttt{0ffab6de} (file
+\texttt{grammar\_GARC1.py} and the nomenclature specification of the same repository), the
+grammar being applied to genomes by gnomonicus \cite{gnomonicus}.
+
+The four conditions that bound the codon-grouping step of TB-Profiler, each read at that
+commit in the file \texttt{combine\_vcf\_}\allowbreak\texttt{variants.py}, are the following.
+The step groups only
+calls whose reference and alternative alleles are one base long and that fall inside a coding
+exon, so nothing is grouped outside coding sequences. It counts haplotypes in the alignment
+only when a BAM file carrying the MD tag is supplied, and otherwise synthesises the haplotypes
+from the depth fields of the variant file. The caller named \texttt{freebayes-haplotype} sets
+the alignment file to none, which removes the counting. And the whole step is skipped when the
+option that splits insertions and deletions is turned off.
+
+The probe construction of Mykrobe, read in \texttt{models.py} of its gene annotation module at
+that commit, proceeds as follows. The gene model builds the inverse of the bacterial codon
+table, from amino acid to the list of its codons. The construction of a coding mutation takes
+the codons of the reference amino acid, uses them to remove from the alternatives the codons
+shared with the reference, and then names one probe for the reference codon of the genome
+against each remaining codon of the target amino acid.
+
+\section*{Supplementary Note S3: variant calling of the genotype pipeline}
+
+The two generations of the genotype pipeline that keep the blocks emitted by the caller
+\cite{senelle2023} process reads as follows. Reads are trimmed with fastp 0.20.1, subsampled
+to 200-fold coverage of the 4\,411\,532-base reference with seqkit 2.2.0, and aligned to H37Rv
+(NC\_000962.3) with BWA-MEM 0.7.17 using \texttt{-Y -M}. Variants are called by snippy 4.6.0,
+which clips with samclip (\texttt{-{}-max 10}) and runs freebayes with \texttt{-p 2 -P 0 -C 2
+-F 0.05}, \texttt{-{}-min-coverage 10}, \texttt{-{}-min-repeat-entropy 1.0}, \texttt{-q 13}
+and \texttt{-m 60}; a call is kept when its genotype is homozygous for the alternative allele,
+its quality is at least 100 and its depth at least 10. The version of freebayes is the one
+resolved for the batch by the package environment rather than pinned by the workflow: 1.3.6
+and 1.3.2 in the batches whose logs we could audit, with samtools and bcftools 1.17 and
+1.15.1 respectively. It is this caller that assembles adjacent substitutions into a single
+multi-nucleotide call, and the five-base blocks of \textit{gyrA} codon 94 described in the
+Results are such calls.
+
+\section*{Supplementary Table S1}
+
+\begin{table}[h]
+\centering
+\small
+\caption*{\textbf{Supplementary Table S1.} The nineteen pairs of a coordinate string and a
+medicine that receive both a verdict of association with resistance and a verdict of absence
+of association under the catalogue that emits every representation (C1). Eleven of the
+nineteen pairs concern rifampicin, and all eleven strings fall within the \textit{rpoB}
+resistance-determining region; the eight others concern the two fluoroquinolones (five
+pairs), ethambutol, pyrazinamide and amikacin. Seventeen distinct strings are involved, two
+of them for two medicines each. Strings are in the zero-based coordinate convention of the
+project, as \texttt{NC\_000962.3:position:reference:alternative}. Source:
+\texttt{p77\_conflits\_C1.tsv}; the same table is provided as
+\texttt{TableS1\_contradictory\_pairs\_C1.csv}.}
+\input{supplementary_generated/tableS1.tex}
+\end{table}
+
+\section*{Supplementary Table S2}
+
+\begin{table}[h]
+\centering
+\small
+\caption*{\textbf{Supplementary Table S2.} Contribution of the decomposition of observed
+blocks, in points of sensitivity, for each medicine, under the ingested catalogue C0 and under
+the catalogue C1 that emits every representation, on the 50\,782 strains whose calls keep
+multi-nucleotide blocks, with a 95\,\% interval from 2\,000 resamplings of sub-lineage
+clusters. Outside the fluoroquinolones the contribution of the decomposition falls from 0.99
+to 0.00 point for isoniazid, from 0.26 to 0.00 for rifampicin, from 0.15 to 0.00 for
+streptomycin and from 0.03 to 0.00 for ethionamide. Under the ingested catalogue the blocks
+that carry a determinant only through decomposition form 49 pairs of a matrix column and a
+medicine, over 38 distinct columns and nine medicines. Sources: \texttt{p77\_C0.tsv} and
+\texttt{p77\_C1.tsv}; the same table is provided as
+\texttt{TableS2\_block\_decomposition\_gain\_by\_medicine.csv}.}
+\input{supplementary_generated/tableS2.tex}
+\end{table}
+
+\section*{Supplementary Table S3}
+
+\begin{table}[h]
+\centering
+\small
+\caption*{\textbf{Supplementary Table S3.} Sensitivity and specificity of the deterministic
+baseline per medicine, with their Clopper--Pearson 95\,\% intervals, under the ingested
+catalogue C0 and under the catalogue C1 that emits every representation, on the 50\,782
+strains whose calls keep multi-nucleotide blocks. The lower block gives the same quantities
+for the two fluoroquinolones when an observed block is matched exactly only, which are the
+first two columns of Table~1 of the main text. The precision of the eleven sensitivities is
+not comparable, the number of resistant strains ranging from 991 for capreomycin, whose
+interval spans 0.662 to 0.721, to 13\,256 for isoniazid; rifampicin, with 10\,019 resistant
+strains, has the narrowest interval, 0.926 to 0.936. Sources: \texttt{p77\_C0.tsv} and
+\texttt{p77\_C1.tsv}; the same table is provided as
+\texttt{TableS3\_clopper\_pearson\_intervals.csv}.}
+\input{supplementary_generated/tableS3.tex}
+\end{table}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

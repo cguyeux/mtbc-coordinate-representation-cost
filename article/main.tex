@@ -1,0 +1,569 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{authblk}
+
+\title{Measured cost of keeping one coordinate representation per variant when
+ingesting a drug-resistance catalogue of the \textit{Mycobacterium tuberculosis}
+complex}
+
+\author[1]{Christophe Guyeux}
+\affil[1]{Universit\'e Marie et Louis Pasteur, CNRS, institut FEMTO-ST, Besan\c{c}on, France}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Catalogues of resistance-conferring mutations of the \textit{Mycobacterium tuberculosis}
+complex are published per variant, in gene-based HGVS notation, so a pipeline comparing
+genomes with one must first express each entry as a genomic coordinate string. The
+coordinate file of the second edition of the World Health Organization catalogue gives
+144\,964 lines for 41\,358 variants, 3.5 per variant, and 60.7\,\% of the variants receive
+more than one; 97\,787 of those lines are multi-nucleotide blocks. Our ingestion kept one
+representation per variant, preferring the single-base form, and so discarded 83\,608 of
+the 120\,917 representations it could have emitted for the variants it shares with the file
+(69.1\,\%), 77\,073 of them blocks. We measure what that rule costs on a matrix of 50\,782
+strains whose variant calls keep blocks. Under the ingested catalogue, decomposing each
+observed block into single-base components raises baseline sensitivity by 57.4 points for
+moxifloxacin (95\,\% interval 29.3 to 63.3) and 50.0 for levofloxacin (24.1 to 57.4); when
+the blocks the source already provides are emitted, the same measurement gives 13.2 (7.9 to
+15.6) and 11.7 (6.3 to 13.3), so 77.0\,\% (66.2 to 79.5) and 76.5\,\% (67.7 to 79.7) of the
+apparent gap follows from the ingestion rule. A pipeline matching both ways reaches the same
+sensitivity either way (0.841 and 0.799), so the rule costs only a pipeline that matches
+exactly. The residual gap is carried by three five-base haplotypes of \textit{gyrA} codon 94
+on a Ser95Thr background, for which the file gives no entry although it gives one for five
+of the eight variants of that codon, twice in that same five-base form. Emitting every representation triples the catalogue, changes final
+sensitivity by less than one point elsewhere, and gives nineteen pairs of a coordinate
+string and a medicine two contradictory verdicts. Three published implementations match
+above the coordinate level, each by a different strategy read here in its source code.
+\end{abstract}
+
+\section{Introduction}
+
+Genome-based prediction of antitubercular drug resistance relies on catalogues that map
+genetic variants to a resistance verdict. The second edition of the World Health
+Organization catalogue \cite{who2023} grades the variants of the complex for 15 medicines,
+and rule-based tools such as TB-Profiler \cite{phelan2019,verboven2022}, Mykrobe
+\cite{hunt2019} and the piezo grammar used by the CRyPTIC consortium apply catalogues of
+this kind to sequenced isolates. A catalogue entry is written at the level of the variant,
+as a gene name and a change in HGVS notation, and the catalogue of the second edition is
+distributed together with a file that gives the genomic coordinates of each entry.
+
+When a pipeline builds a strain by variant matrix, which is what a
+machine-learning predictor, a bacterial genome-wide association study and a deterministic
+rule engine all consume, the natural key is a coordinate string: a chromosome, a position,
+a reference allele and an alternative allele, in the form used by the SPDI data model
+\cite{holmes2020}. The same change in a genome can be written as several such strings,
+because a sequence variant has no canonical coordinate form unless one is imposed
+\cite{tan2015}: two adjacent substitutions inside a codon can be written as two
+single-base changes or as one block of equal length, and an insertion or a deletion in a
+repeated context can be left-aligned or right-aligned. The coordinate file of the
+catalogue reflects this, and gives several representations for most of its entries. An
+ingestion that keeps one of them per variant therefore makes a choice, and the choice is
+silent downstream: an isolate whose call does not use the representation that was kept is
+simply counted as carrying no determinant, and is predicted susceptible.
+
+Neither the phenomenon nor its remedies are new. Verboven et al. \cite{verboven2022} state
+the difficulty of format for the first edition of the catalogue, noting that the way
+variants are listed makes a classification hard to look up when the sequencing data have
+been processed by another pipeline, especially for insertions and deletions. Outside tuberculosis the same mechanism has
+been measured on the calling side. Srinivasan et al. \cite{srinivasan2021} report 12\,141
+misannotated multi-nucleotide variants (MNVs) in 10\,383 variant files of The Cancer
+Genome Atlas, trace them to callers that emit adjacent substitutions separately, so that
+the amino acid deduced from each differs from the one the combined change produces, and
+recommend merging adjacent calls into MNVs as a best practice of sequencing pipelines.
+Wang et al. \cite{wang2020} identify 1\,792\,248 MNVs in the exomes and genomes of the
+Genome Aggregation Database, 18\,756 of them with a combined effect on the protein
+sequence that neither constituent predicts, and conclude for haplotype-aware annotation.
+Repun \cite{repun2024} unifies variant representation across sequencing platforms,
+precisely because a representation that differs between platforms defeats comparison by
+equality. What none of these works gives is the cost of the choice in the currency of the
+application that makes it: points of sensitivity, medicine by medicine, on a cohort of
+phenotyped isolates.
+
+A reader may hold that a chain which keeps one representation
+per variant has a defect of its own making, that correcting it is ordinary maintenance,
+and that a pipeline matching above the coordinate level never had anything to gain, a
+reading that the results below support, since the complete baseline reaches the same
+sensitivity under both ingestions. Part of that is conceded here: the larger
+share of the gap reported below follows from a rule written in our own ingestion code, and
+we name no chain outside this project that applies the same rule. Three considerations
+nevertheless make the measurement worth reporting. The residual that remains once every
+representation of the source has been emitted is carried by calls that combine a graded
+determinant with an adjacent variant, and the coordinate file enumerates such combined
+haplotypes for five of the eight variants of the codon concerned and not for the three that
+carry that residual, twice in exactly the form the three missing lines would take, so that
+residual records an enumeration that is incomplete, and uneven in form, and not one that is
+impossible (Section~\ref{sec:residuel}). Nothing establishes that the class of exposed chains is
+empty, although no chain of the complex is named here: in cancer genomics, where the
+mechanism had been diagnosed and a best practice recommended, 20 of the 178 published
+studies whose calls on seven commonly mutated genes were examined in a public portal were
+still missing MNVs \cite{srinivasan2021}, and a systematic review of tuberculosis
+prediction tools published in 2026 names the variant-calling pipeline among the unmeasured
+covariates of their performance heterogeneity \cite{peng2026}, which is a covariate
+adjacent to the ingestion rule rather than that rule itself. Finally, the construction at
+stake is the strain by variant matrix that a statistical predictor such as GenTB
+\cite{groschel2021} or a bacterial genome-wide association study consumes, rather than the
+diagnostic pipeline; a coordinate string is the straightforward key for such a matrix, and
+none of the three implementations read in Section~\ref{sec:outils} intervenes in its
+construction. What the published chains of that kind use as a key is not established here.
+
+The subject of these measurements is an ingestion chain and not the catalogue, which supplies
+the representations that the chain discards, and the claim of novelty is restricted
+accordingly. We do not claim that the phenomenon, its mechanism or its remedies are
+undescribed, since the works cited above describe them; we report that the search of
+Section~\ref{sec:anterieur} returned no measurement of what the choice costs a resistance
+prediction.
+
+\section{Materials and methods}
+
+\subsection{Catalogue and its coordinate source}
+The consolidated catalogue used here is a long table with one row per assertion of the
+form variant, medicine, source and verdict, built by merging the master file of the WHO
+catalogue \cite{who2023}, the reference database of TB-Profiler \cite{phelan2019} and an
+empirical signal derived from the CRyPTIC compendium \cite{cryptic2022}. It holds 64\,052
+rows over 18 medicines. The three sources are stacked rather than arbitrated: each contributes
+its own assertions, so one variant can carry assertions of several sources, and each row keeps
+the grade of its own source, normalised to three values. Of the five confidence grades of the
+WHO catalogue, grades 1 and 2 become an association with resistance, grade 3 uncertain, and
+grades 4 and 5 an absence of association. HGVS notation is resolved to the coordinate convention of the
+project with the official WHO genomic-coordinates file, applying the one-base offset
+between the VCF convention of that file and the zero-based convention of the project, a
+correspondence validated against the pangenome. The resolver returns every representation
+of a variant whose reference and alternative alleles are at most 24 bases long; the
+3\,876 lines of the file (2.7\,\%) that exceed this length are never emitted.
+
+\subsection{Two ingestions of the same source}
+Two catalogues are built from the same source files and differ by one rule. In the
+ingested catalogue, written C0 below, the builder collects the representations of a
+variant, keeps those whose reference and alternative alleles are single bases, and emits
+the block representations only when no single-base form exists. In the second catalogue,
+written C1, every representation within the length limit is emitted. C0 is the catalogue
+that the project has been using; re-running the chain with its defaults reproduces it as a
+set of rows exactly (64\,052 rows, none in excess and none missing), and C0 is contained
+in C1.
+
+The preference for the single-base form is written twice in the chain. The index of the
+HGVS resolver keeps one single-base representation per variant and exposes it as the
+resolution of that variant, and the catalogue builder applies the same preference to the
+full table of representations. The loss counted below is produced by the builder, since it
+reads the full table rather than the reduced index.
+
+\subsection{Genotypes, phenotypes and the matrix that keeps raw calls}
+Binary susceptibility phenotypes measured in the laboratory were consolidated from the
+CRyPTIC reuse table \cite{cryptic2022}, from the expanded CRyPTIC release
+\cite{cryptic2026dataset} which brings twelve drug-susceptibility testing sources, from the
+NCBI BioSample antibiogram tag read through the TB-Annotator research database
+\cite{senelle2023}, from a published association panel \cite{coll2018}, from the PATRIC
+antimicrobial-resistance table, whose labels for moxifloxacin, amikacin and capreomycin
+come almost entirely from one Russian surveillance collection \cite{casali2014}, and from
+a few literature entries. When a strain and a
+medicine carry labels from several sources, the consolidated table keeps the source that
+ranks first in an order fixed beforehand, a property of the source and never of the
+genotype. One source of the project, a set of curated dated isolates, is excluded
+throughout, because its labels are computed from the genotype and would make any
+sensitivity circular; a pair that loses its label this way falls back on the next source.
+
+Variant profiles were read from two generations of the genotyping pipeline that keep the
+blocks emitted by the variant caller: a precomputed pangenome (41\,484 strains) and the
+per-strain genotype files of the research database \cite{senelle2023} (9\,298 strains), which
+agree where they overlap. In that pipeline, reads are aligned to H37Rv with BWA-MEM and
+variants are called by snippy, which runs freebayes in diploid-free mode and keeps the calls
+homozygous for the alternative allele above a quality and a depth threshold; Supplementary
+Note~S3 gives the versions, the options and the thresholds. That freebayes assembles adjacent
+substitutions into one haplotype call is why blocks are present in these data at all: the
+block question is a property of the caller and of its options, not of the genomes. The matrix built from them holds 50\,782 strains, 41\,551 of
+them carrying at least one measured phenotype among the eleven medicines of
+Table~\ref{tab:medicaments}. Every catalogued determinant is kept as a column whatever its
+frequency. The question asked here cannot be posed on the other matrices of the project:
+the matrix used for the learned predictors brings all three genotype generations to one
+representation, with every block split into single-base variants, and the third generation,
+read from the tblearn server, does not keep blocks at all. Lineage
+assignments in the Coll system were retrieved for the resampling described below.
+
+The labels are heterogeneous, and the absolute sensitivities reported here are
+compositions of their sources: the 121\,620 labelled pairs (51.1\,\% of 237\,887) that come
+from the expanded CRyPTIC release rest on eleven of its twelve testing sources, which use
+different methods; several of the cohorts are reported by their authors to have served in
+building earlier catalogues, the first edition of the WHO catalogue among them, and the
+CRyPTIC-v1.0 cohort that the release notes \cite{cryptic2026dataset} describe as handed over for that purpose supplies
+92\,174 pairs (38.7\,\%); and one surveillance study (BioProject PRJNA1237251) supplies 24.3,
+23.9 and 22.0\,\% of the susceptible isolates of isoniazid, rifampicin and ethambutol and under
+6\,\% of the resistant ones. These absolute values are not the
+object of this report. Every comparison below holds the strains, the labels and the matrix
+fixed and varies only the ingestion of the catalogue, so that the composition of the
+labels is common to the two arms and cancels in the difference.
+
+\subsection{Deterministic baseline and measurement by removal}
+The deterministic baseline labels a strain resistant to a medicine when it carries at least
+one determinant that the catalogue grades as associated with resistance for that medicine,
+and only those: the uncertain rows and the rows of absence of association are never read, so
+a coordinate string carrying contradictory verdicts from two sources is read as associated
+with resistance. Complete matching proceeds in three ways: single-base variants are matched
+exactly, an observed multi-nucleotide block is decomposed into its single-base components
+which are then matched, and insertions and deletions are matched exactly against every
+catalogued representation. Two further steps bear not on the matching but on which
+determinants exist to be matched: codon propagation, which emits for a protein-level variant
+every nucleotide representation of the target amino acid rather than one, and the inclusion of
+rare determinants, which keeps a catalogued determinant as a column whatever its frequency.
+The four steps measured below are therefore the block step, the indel step, codon propagation
+and the rare-determinant step. Sensitivity and specificity are given per medicine on the
+measured phenotypes, with Clopper--Pearson 95\,\% intervals (Supplementary Table~S3).
+
+The corrections of the chain were introduced one after another and the states before them
+were not archived, so the contribution of each is measured by removal: the sensitivity of
+the complete baseline minus the sensitivity of the baseline deprived of one of the four steps
+just defined, the others remaining active; deprived of the rare-determinant step, the baseline
+drops the determinants present in fewer than 20 strains, as the frequency filter of a feature
+matrix does. Intervals on a difference come from 2\,000 resamplings of the sub-lineage codes
+as clusters, the same draws serving the complete and the deprived baseline, and serving both
+catalogues, which makes the ratio of two differences a paired quantity. The two catalogues are evaluated on the same matrix, the one
+rebuilt with C1, because a matrix built with C0 would lack the rare block columns and the
+comparison would then confound two effects.
+
+Two controls frame the measurement. The chain re-run with its defaults reproduces the
+ingested catalogue, as stated above. The matrix of the previous run of this project,
+evaluated with C0, reproduces the sensitivities published from it to the third decimal for
+the fluoroquinolones; the only difference is at most 0.14 point on rifampicin, because
+that earlier audit did not count the exact match of a block none of whose components is a
+catalogued determinant, whereas the measurement reported here counts an exact match or a
+decomposed one.
+
+\subsection{Reading of three published implementations}
+The matching strategies described in Section~\ref{sec:outils}, those of TB-Profiler,
+Mykrobe \cite{hunt2019} and piezo \cite{piezo}, the grammar being applied to genomes by
+gnomonicus \cite{gnomonicus}, were read in the public source code of the tools, in the
+state of their repositories on 16 November 2026; Supplementary Note~S2 lists the commits
+and files. None of the three was run on the data of this study, so that section describes
+how each matches and not how each performs.
+
+\section{Results}
+
+\subsection{The source gives several representations per variant, the ingestion keeps one}
+The coordinate file of the catalogue holds 144\,964 lines with a readable variant,
+position, reference allele and alternative allele, for 41\,358 distinct variants, that is
+3.5 lines per variant. More than one representation is given for 25\,118 variants
+(60.7\,\%), and for 16\,184 of the 18\,732 variants written at the protein level
+(86.4\,\%). By nature, 32\,155 lines are single-base changes, 97\,787 are blocks whose
+reference and alternative alleles have the same length above one, 11\,146 are insertions
+or deletions, and 3\,876 exceed the length limit of the resolver, which is a fourth class of
+line and not a fourth nature. Indexed by variant rather than by coordinate, the file supplies
+the alternative representations itself: for \textit{embB} Met306Ile it gives the three
+alternative bases at one position together with a block of ten bases; for \textit{gyrA}
+Asp94Gly it gives five representations, among them the four-base block
+\texttt{ACAG}$\rightarrow$\texttt{GCAC}.
+
+The ingestion keeps one representation per variant whenever a single-base form exists. On
+the 30\,534 variants that the consolidated catalogue shares with the coordinate file, the
+resolver can emit 120\,917 representations and the catalogue retains 37\,309: 83\,608 are
+discarded, 69.1\,\%, of which 77\,073 are blocks, and 19\,154 variants (62.7\,\%) lose at
+least one representation. The ingested catalogue consequently holds 52\,041 rows whose
+coordinate string is a single-base change and 772 whose string is a block, over 32\,596 and
+543 distinct strings respectively; with the 4\,642 distinct strings of its insertion and
+deletion rows, these make up the 37\,781 distinct strings of the catalogue.
+
+\subsection{Three quarters of the fluoroquinolone block gap follows from the ingestion rule}
+Under the ingested catalogue,
+removing the decomposition of observed blocks lowers moxifloxacin sensitivity from 0.841 to
+0.267 and levofloxacin sensitivity from 0.799 to 0.300, differences of 57.4 and 50.0
+points (Table~\ref{tab:fq}). Under the catalogue that emits the blocks of the source, the same removal costs
+13.2 and 11.7 points, since matching exactly now recovers most of the carriers: 77.0\,\% of
+the difference measured for moxifloxacin and 76.5\,\% of the difference measured for
+levofloxacin follow from the rule applied at ingestion rather than from the written form of
+the calls.
+
+These intervals are wide and asymmetric, the lower bound of 29.3 points being half of the 57.4
+estimated for moxifloxacin, which is the content of the resampling and not noise: the quantity
+depends on the frequency of one sub-lineage marker, Ser95Thr, and the draws resample
+sub-lineages. The ratio is far better determined than either difference, because both follow
+that frequency together and the two arms share the draws; propagated through the same 2\,000
+paired draws it is 77.0\,\% (66.2 to 79.5) and 76.5\,\% (67.7 to 79.7). The cohort fixes how
+much of the gap the rule accounts for, not how large the gap is.
+
+The sensitivity of the complete baseline is identical under the two ingestions, 0.841 for
+moxifloxacin and 0.799 for levofloxacin, with identical specificities, so emitting the
+blocks benefits a pipeline that matches exactly and adds nothing to a pipeline that
+decomposes. The specificity cost of the decomposition falls with it
+(Table~\ref{tab:fq}), because the strains
+that the decomposition newly flags are, for the most part, already flagged by the exact
+match of their block. Outside the fluoroquinolones the contribution of the decomposition
+is at most 0.99 point under the ingested catalogue, for isoniazid, and disappears when the
+blocks are emitted (Supplementary Table~S2).
+
+\begin{table}[t]
+\centering
+\caption{Deterministic baseline for the two fluoroquinolones under the two ingestions of
+the same source, on the 50\,782 strains whose calls keep multi-nucleotide blocks. C0 is the
+ingestion that keeps one representation per variant, C1 the ingestion that emits every
+representation of the coordinate file within the length limit. Both are evaluated on the
+same matrix. The gain of the decomposition is the sensitivity of the complete baseline
+minus the sensitivity of the baseline that matches blocks exactly only, with a 95\,\%
+interval from 2\,000 resamplings of sub-lineage clusters.}
+\label{tab:fq}
+\begin{tabular}{llcccc}
+\toprule
+ & & \multicolumn{2}{c}{Sensitivity} & Gain of the & Specificity \\
+Medicine & Ingestion & exact only & complete & decomposition & cost \\
+\midrule
+Moxifloxacin (2\,916 R) & C0 & 0.267 & 0.841 & 57.4 (29 to 63) & 3.15 \\
+Moxifloxacin (2\,916 R) & C1 & 0.709 & 0.841 & 13.2 (8 to 16) & 0.58 \\
+Levofloxacin (2\,358 R) & C0 & 0.300 & 0.799 & 50.0 (24 to 57) & 1.63 \\
+Levofloxacin (2\,358 R) & C1 & 0.682 & 0.799 & 11.7 (6 to 13) & 0.30 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The residual gap is three haplotypes that the coordinate file does not list}
+\label{sec:residuel}
+Under the catalogue that emits every representation, exactly three columns of the matrix
+still carry a catalogued determinant only through decomposition, and they account for the
+residual 13.2 and 11.7 points. All three are five-base blocks at \textit{gyrA} codon 94 on
+a Ser95Thr background: \texttt{GACAG}$\rightarrow$\texttt{AACAC} (Asp94Asn, 433 strains),
+\texttt{GACAG}$\rightarrow$\texttt{TACAC} (Asp94Tyr, 221 strains) and
+\texttt{GACAG}$\rightarrow$\texttt{CACAC} (Asp94His, 86 strains), 740 strains in all. Among
+the strains they carry that have a moxifloxacin label, 239, 111 and 44 are resistant and 86
+are susceptible, which is 13.5 points of the 2\,916 resistant strains for a measured
+difference of 13.2 points; for levofloxacin, 172, 70 and 41 are resistant and 33 are
+susceptible, 12.0 points of the 2\,358 resistant strains for a measured difference of 11.7
+points. The accounting is therefore closed: the residual gap is these three haplotypes and
+nothing else. The carrier share slightly exceeds the measured difference, by 0.3 point for
+each of the two medicines, because a minority of these strains also carries another
+catalogued determinant for the medicine and is recovered without the decomposition.
+
+The coordinate file gives, for these three variants, the single-base change and the
+three-base codon changes \texttt{GAC}$\rightarrow$\texttt{AAT},
+\texttt{GAC}$\rightarrow$\texttt{TAT} and \texttt{GAC}$\rightarrow$\texttt{CAT}, and no
+five-base form. The caller emits five bases because the adjacent Ser95Thr substitution is
+part of the same block, and Ser95Thr is frequent in this cohort, being a marker of a
+sub-lineage. No representation of Asp94Asn taken alone equals a block that also carries
+Ser95Thr, so exact matching recovers these strains only from an entry that combines the two
+substitutions. The file does carry such an entry for five of the eight variants of this codon,
+and its enumeration is not merely incomplete: it is uneven in form from one amino acid to the
+next at the same codon. For Asp94Gly, Asp94Val and Asp94Ala it gives a four-base block at
+position 7582, which is the combined haplotype with Ser95Thr and agrees border for border
+with the string the caller emits for those variants; Asp94Ala receives two, one with Ser95Thr
+and one with Ser95Ala. For Asp94Phe and Asp94Leu it gives a five-base block at position 7581,
+\texttt{GACAG}$\rightarrow$\texttt{TTCAC} and \texttt{GACAG}$\rightarrow$\texttt{CTCAC}, at
+the position and in the form of the three strings above. What is missing for Asp94Asn,
+Asp94Tyr and Asp94His is therefore not a notation able to express the haplotype, nor a line of
+an unprecedented kind, but three lines of a form the file already carries twice at that very
+position for other amino acids of the same codon: an identity, not an analogy.
+
+\subsection{The three other representation effects hardly move}
+Table~\ref{tab:medicaments} gives, for each medicine, the contribution of the three steps
+other than the block decomposition under the two ingestions. Codon propagation is unchanged to
+the second decimal everywhere, as expected: the single-base alternatives of a codon are
+already emitted by the ingested catalogue, and the blocks add nothing to them. The
+contributions of indel matching and of the rare-determinant step rise slightly, by 0.66 point
+at most, because the file supplies alternative normalisations of an insertion or a deletion
+that the ingestion also discarded when a single-base form existed for the same variant. The
+full emission accordingly changes only the final sensitivities that depend on indels, those of
+pyrazinamide, ethionamide, capreomycin, isoniazid and streptomycin, and by less than one
+point; the six other medicines are unchanged and specificities move by at most 0.07 point.
+
+\begin{table}[t]
+\centering
+\caption{Contribution of the three steps other than the decomposition of observed blocks, in
+points of sensitivity, under the two ingestions, and sensitivity of the complete baseline, on
+the 50\,782 strains whose calls keep multi-nucleotide blocks. A contribution is the
+sensitivity of the complete baseline minus the sensitivity of the baseline deprived of that
+step. The contribution of the block step itself is given for the two fluoroquinolones in
+Table~\ref{tab:fq} and for all eleven medicines in Supplementary Table~S2. $n_R$ and $n_S$
+are the numbers of resistant and susceptible strains with a label for that medicine; the
+Clopper--Pearson intervals of these sensitivities are in Supplementary Table~S3.}
+\label{tab:medicaments}
+\small
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+ & & & \multicolumn{2}{c}{Codons} & \multicolumn{2}{c}{Indels} &
+\multicolumn{2}{c}{Rare} & Sensitivity \\
+Medicine & $n_R$ & $n_S$ & C0 & C1 & C0 & C1 & C0 & C1 & C0 $\rightarrow$ C1 \\
+\midrule
+Isoniazid & 13\,256 & 25\,362 & 0.17 & 0.17 & 0.41 & 0.45 & 1.05 & 1.09 & 0.903 $\rightarrow$ 0.904 \\
+Rifampicin & 10\,019 & 28\,665 & 0.04 & 0.04 & 0.85 & 0.85 & 1.41 & 1.41 & 0.931 $\rightarrow$ 0.931 \\
+Ethambutol & 5\,610 & 31\,142 & 5.42 & 5.42 & 0.00 & 0.00 & 0.11 & 0.11 & 0.830 $\rightarrow$ 0.830 \\
+Pyrazinamide & 2\,893 & 12\,962 & 1.66 & 1.66 & 10.89 & 11.55 & 17.97 & 18.63 & 0.733 $\rightarrow$ 0.739 \\
+Moxifloxacin & 2\,916 & 14\,931 & 0.00 & 0.00 & 0.00 & 0.00 & 1.27 & 1.27 & 0.841 $\rightarrow$ 0.841 \\
+Levofloxacin & 2\,358 & 10\,982 & 0.00 & 0.00 & 0.00 & 0.00 & 1.27 & 1.27 & 0.799 $\rightarrow$ 0.799 \\
+Streptomycin & 3\,990 & 7\,642 & 0.28 & 0.28 & 5.44 & 5.46 & 2.66 & 2.68 & 0.764 $\rightarrow$ 0.764 \\
+Ethionamide & 3\,262 & 13\,710 & 1.13 & 1.13 & 8.28 & 8.58 & 7.14 & 7.45 & 0.711 $\rightarrow$ 0.714 \\
+Amikacin & 1\,651 & 17\,795 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.738 $\rightarrow$ 0.738 \\
+Kanamycin & 1\,946 & 16\,998 & 0.00 & 0.00 & 0.05 & 0.05 & 0.05 & 0.05 & 0.742 $\rightarrow$ 0.742 \\
+Capreomycin & 991 & 8\,806 & 0.20 & 0.20 & 4.04 & 4.24 & 4.24 & 4.44 & 0.692 $\rightarrow$ 0.694 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{What emitting every representation costs}\label{sec:emission}
+The catalogue that emits every representation holds 204\,522 rows against 64\,052, that is
+3.19 times as many, and contains the ingested catalogue. The 140\,470 added rows are
+129\,459 blocks and 11\,011 insertions or deletions, almost all of them from the WHO source,
+and they carry 99\,103 verdicts of uncertain association, 23\,540 of association with
+resistance and 17\,827 of absence of association. The number of distinct coordinate strings
+rises from 37\,781 to 115\,097, and the number of distinct strings carrying at least one
+association with resistance from 4\,242 to 23\,958, of which 14\,670 are blocks. Those
+14\,670 strings are the combinatorial space of the codons of the catalogued amino-acid
+changes rather than a list of observed haplotypes, and the cohort bears this out: over the
+eleven medicines, the number of matrix columns carrying a catalogued resistance determinant
+rises only from 1\,389 to 1\,565, so the overwhelming majority of the added strings is
+carried by no strain of the 50\,782.
+
+The emission also creates contradictions that the ingested catalogue did not have. Nineteen
+pairs of a coordinate string and a medicine receive both a verdict of association with
+resistance and a verdict of absence of association, against none before (Supplementary
+Table~S1). The clearest case is the four-base block of \textit{gyrA} codon 94: the same string
+\texttt{ACAG}$\rightarrow$\texttt{GCAC} is a representation of Asp94Gly, graded as associated
+with resistance, and a representation of Ser95Thr, graded as not associated, for both
+fluoroquinolones. As stated in the methods, the matching reads only the assertions of
+association with resistance, so the resistant verdict prevails by default; the figures above
+are unaffected, and an arbitration would have to be specified if a catalogue of this form were
+adopted.
+
+\subsection{Three strategies that avoid matching at the coordinate level}\label{sec:outils}
+None of the three published implementations examined here depends on a coordinate string
+alone, and each avoids that dependence differently.
+
+TB-Profiler, through the \texttt{pathogen-profiler} library, matches on several keys at
+once. The annotation of a consequence collects, by union into one set, the entries found
+under the keys (gene, nucleotide change in HGVS), (gene, protein change), (gene,
+sequence-level HGVS string) and (gene, each sequence-ontology term of the consequence), and
+the entries whose key declares a range of positions covering the consequence. The coordinate string is one key
+among five families, and a protein-level entry is reached whatever the codon. The same
+pipeline also performs the operation inverse to decomposition before annotating: in the
+command that annotates a variant file, a step groups the calls by exon and codon position,
+reconstructs the haplotype of the codon, and emits a single multi-nucleotide variant which is
+then annotated at the protein level. Four conditions bound that step, each read in the code
+and listed in Supplementary Note~S2: it groups only single-base calls inside a coding exon;
+it counts haplotypes in the alignment only when a suitable alignment file is supplied, and
+otherwise synthesises them from the depth fields of the variant file; one of the callers it
+accepts removes that counting; and the whole step is skipped when the option that splits
+insertions and deletions is turned off. Protein-level annotation remains the fallback in each
+of these cases.
+
+Mykrobe enumerates codons when it builds its probes. Its gene model inverts the bacterial
+codon table, from amino acid to the list of its codons, and names one probe for the reference
+codon of the genome against each codon of the target amino acid that the reference does not
+share (Supplementary Note~S2). The enumeration is one-sided, running from the single reference
+codon to every codon of the alternative amino acid; an amino-acid change is still captured
+whichever codon realises it, and the probe being a whole codon, the block question does not
+arise either. This behaviour has been published since 2019 \cite{hunt2019}.
+
+The piezo grammar, which gnomonicus applies to genomes, is gene-centred. A rule is written
+as a gene name, the character \texttt{@} and a mutation, and the prediction function splits
+the pair on that character; the position is an amino-acid number for a coding sequence and
+a nucleotide number for a ribosomal RNA gene or a promoter. No coordinate string appears in
+a rule.
+
+The authors of piezo and gnomonicus have since characterised that pair on 2\,663 isolates
+under their own implementation of the second edition, and their comparison with TB-Profiler
+finds the two tools comparable although their design choices differ \cite{westhead2025}. That
+measurement compares two implementations at a fixed representation; it does not vary the
+representation, which is the quantity measured here. A fourth published strategy dissolves the
+question rather than answering it at the matching step, by encoding the haplotypes of
+resistance and of susceptibility in a reference graph, where a haplotype is a path and not a
+string compared by equality \cite{drprg2023}; such a graph is still built from a catalogue
+distributed per variant, so the enumeration of Section~\ref{sec:residuel} bounds what any of
+these strategies can find in the source.
+
+\section{Discussion}
+
+\subsection{Relation to previous work}\label{sec:anterieur}
+The ingestion written C1 here, which emits every representation of a variant, is the
+published design choice of Verboven et al. \cite{verboven2022} for insertions and
+deletions, made on the previous edition of the catalogue. The restriction to insertions and
+deletions matters, because the two works do not bear on the same class of variants: the
+ambiguity they resolved by listing every possibility is the left or right alignment of one
+indel in a repeated context, whereas 77\,073 of the 83\,608 representations dropped here
+(92.2\,\%) are blocks of equal reference and alternative length, indels accounting for
+11\,146 of the 144\,964 lines of the coordinate file. Their conversion reached 17\,061 of the
+17\,356 variants of that edition, 98.3\,\%, a figure that counts variants a conversion can
+express and carries no consequence for a prediction. Their 254 entries that group several
+variants into a single indel are the nearest counterpart, on the catalogue side, of the
+residual of Section~\ref{sec:residuel}, since HGVS notation does not admit several variants in
+one entry unless they share a codon. The counterpart is nevertheless loose: their grouped
+entries are present in the catalogue and cannot be written in the notation, whereas the three
+haplotypes described here are absent
+from the coordinate file although the notation expresses them, as the five-base entries given
+for Asp94Phe and Asp94Leu show.
+
+The two remedies applied here have both been published: emitting every representation
+\cite{verboven2022} and treating the codon rather than the base as the unit of comparison
+\cite{srinivasan2021,wang2020}. We searched for a published measurement of what the choice
+between them costs a resistance prediction, in November 2026, in a local mirror of the
+PubMed tuberculosis corpus, in the full text indexed by Europe PMC and on the web.
+Supplementary Note~S1 gives the protocol: the measured state of the mirror, the seven queries
+verbatim, the number of records each returned, the criterion of inclusion, and the candidates
+whose abstract was read in full with the reason each was set aside. The queries returned 75
+records, 51 of them on the one axis that bears directly on prediction tools, and none of the
+75 measures the effect of a representation choice in points of sensitivity. A search that
+returns nothing does not establish that nothing exists, so the claim is the narrow one: we
+have found no such measurement.
+
+\subsection{What follows for a chain that builds a matrix}
+The gap measured here is a property of the ingestion chain. The cost is unevenly distributed: it is
+large for the fluoroquinolones, where the resistance-determining codon of \textit{gyrA} is
+adjacent to a frequent sub-lineage marker and is therefore called as a block, and it is
+negligible for the medicines whose determinants are isolated substitutions or insertions and
+deletions. This unevenness is what makes the defect hard to notice.
+
+Two conclusions follow for anyone building a strain by variant matrix from a catalogue
+published in HGVS. The first is that the matching procedure and the ingestion rule have to
+be designed together, since the same sensitivity can be reached from either end. The second is that emitting every representation of the file as it stands is not
+sufficient on its own. The residual thirteen points of moxifloxacin are carried by three
+haplotypes that the coordinate file does not list, and listing them would mean enumerating
+the combinations of a graded determinant with the variants called next to it, which this
+file does for five of the eight variants of the codon and not for the three that carry the
+residual. A source that grades one variant at a time can carry such combinations, as those
+five entries show, but
+carrying them all means paying on the catalogue side the combinatorial price measured in
+Section~\ref{sec:emission}, and the set to enumerate depends on which neighbours a given
+cohort actually calls. A step that decomposes the observed call, or a matching performed
+above the coordinate level, settles that class without enumerating it, and it is precisely
+the class that grows with the frequency of the neighbouring marker.
+
+This report says nothing about the part of the unexplained resistance that is not a matter of
+representation. That part has been partitioned elsewhere: on 509 isolates tested against nine
+medicines, Hong et al. \cite{hong2026} attribute most of the discordance between the
+genotypic and the phenotypic verdict to errors of the phenotypic test, to hetero-resistance
+and to determinants recovered by another tool, and conclude that unknown mechanisms of
+resistance are not its main cause.
+
+\section{Limitations}
+
+The measurement rests on one cohort, one caller and one catalogue. The matrix is the one that keeps the blocks emitted by the
+variant caller, 50\,782 strains out of the 85\,509 that the project genotypes.
+
+The residual gap was characterised at one codon. Three haplotypes of \textit{gyrA} codon 94
+account for it on this cohort, but the blocks of \textit{gyrB} and of the other genes were
+not examined one by one, and a cohort with different sub-lineage frequencies would give a
+different residue. The 3\,876 coordinate lines longer than 24 bases are never emitted by the
+resolver, and their effect was not measured.
+
+The strategies of the three published tools were read in their source code, in one state of
+their repositories, and none of the tools was executed here; no claim is made about their
+sensitivity, nor about whether they recover the three haplotypes. Whether a learned
+predictor trained on a matrix that keeps raw blocks loses the same sensitivity as the
+deterministic baseline has not been measured. Finally, a third edition of the reference
+catalogue was published in November 2026 and has not been ingested here, so the counts of
+representations reported above describe the second edition.
+
+\section{Data and code availability}
+% STATUT AU 2026-11-21 (P7.16) : le depot GitHub est PRIVE et rend 404 a un tiers. L'enonce est donc
+% au FUTUR et le crochet de travail imprime a ete retire (review du 2026-11-21, point 2). Si P7.15
+% aboutit (publication du depot et archivage d'une version sous DOI avant soumission), repasser cette
+% section au present de l'indicatif et y porter l'adresse publique et le DOI.
+Supplementary Tables~S1, S2 and S3 are each provided as a data file, named in its caption.
+The ingestion chain, the two catalogues, the measurement scripts and the measurement outputs
+will be deposited in a public repository and archived under a DOI, which will be given here,
+upon acceptance.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

@@ -1,0 +1,22 @@
+indicateur	valeur	detail
+lignes_fichier_oms	144964	lignes à variant, position, ref et alt lisibles
+variants_fichier_oms	41358	
+representations_par_variant	3.51	moyenne
+variants_a_plusieurs_representations	25118	60.7 %
+variants_proteiques	18732	notation _p.
+variants_proteiques_a_plusieurs_representations	16184	86.4 %
+lignes_oms_snp	32155	
+lignes_oms_mnv	97787	
+lignes_oms_indel	11146	
+lignes_oms_long	3876	2.7 %
+lignes_catalogue_C0	64052	catalogue consolidé vivant
+medicaments_du_catalogue_C0	18	
+medicaments_de_la_source_oms	15	médicaments distincts des assertions de source OMS
+variants_R_associes_du_catalogue	1361	au moins une assertion R-associated
+spdi_bloc_R_associes_de_l_emission_complete	14670	SPDI distincts de même longueur ref et alt
+variants_du_catalogue_retrouves_dans_oms	30534	
+representations_fournies_par_oms	120917	resolve_all, 24 bases au plus
+representations_retenues_par_la_chaine	37309	catalogue consolidé vivant (C0)
+representations_perdues	83608	69.1 %
+representations_perdues_en_bloc	77073	de même longueur ref et alt
+variants_perdant_au_moins_une_representation	19154	62.7 %

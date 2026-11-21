@@ -1,0 +1,9 @@
+variant	acide_amine	n_representations	n_blocs_4_ou_plus	longueur_bloc_max	blocs
+gyrA_p.Asp94Ala	Ala	6	2	4	7582:ACAG>CCAC;7582:ACAG>CCGC
+gyrA_p.Asp94Asn	Asn	2	0	0	-
+gyrA_p.Asp94Gly	Gly	5	1	4	7582:ACAG>GCAC
+gyrA_p.Asp94His	His	2	0	0	-
+gyrA_p.Asp94Leu	Leu	1	1	5	7581:GACAG>CTCAC
+gyrA_p.Asp94Phe	Phe	3	1	5	7581:GACAG>TTCAC
+gyrA_p.Asp94Tyr	Tyr	2	0	0	-
+gyrA_p.Asp94Val	Val	5	1	4	7582:ACAG>TCAC

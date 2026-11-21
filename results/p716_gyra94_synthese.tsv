@@ -1,0 +1,6 @@
+indicateur	valeur	detail
+variants_du_codon	8	variants protéiques distincts au codon
+variants_a_entree_combinee	5	au moins un bloc de 4 bases ou plus
+variants_a_bloc_cinq_bases	2	bloc de 5 bases (position et forme des manquants)
+variants_sans_entree_combinee	3	Asn, His, Tyr
+lignes_du_codon	26	toutes représentations
