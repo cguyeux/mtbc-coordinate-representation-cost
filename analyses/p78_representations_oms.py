@@ -7,7 +7,7 @@ Objet      : donner un TSV aux chiffres du manuscrit recadré (A1) qui portent s
              sensibilité, eux, viennent de `p77_C0.tsv` / `p77_C1.tsv` (P7.7) et ne sont pas recalculés ici.
 Entrées    : data/sources/who_catalogue/WHO-UCN-TB-2023.7-eng_genomic_coordinates.txt (1-based),
              catalogue/catalogue_consolide.tsv (catalogue vivant, dit C0).
-Sorties    : résultats/model/p78_representations_oms.tsv (indicateur, valeur, detail).
+Sorties    : results/model/p78_representations_oms.tsv (indicateur, valeur, detail).
 Réutilisable : oui pour un autre catalogue HGVS fourni avec un fichier de coordonnées multi-lignes.
 Projet     : Resistance_antibio (P7.8)
 Date       : 2026-11-16
@@ -26,7 +26,7 @@ import paths
 from hgvs_to_spdi import resolve_all
 
 COORD = paths.SRC_WHO / "WHO-UCN-TB-2023.7-eng_genomic_coordinates.txt"
-SORTIE = paths.ROOT / "résultats" / "model" / "p78_representations_oms.tsv"
+SORTIE = paths.ROOT / "results" / "model" / "p78_representations_oms.tsv"
 MAX_LEN = 24  # filtre de `resolve_all`, donc de ce que la chaîne peut émettre
 
 

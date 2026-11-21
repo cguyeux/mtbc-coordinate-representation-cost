@@ -27,12 +27,13 @@ deterministic baseline under each.
 | `analyses/variant_match.py` | the reconciled matching: exact single-base, decomposition of an observed block, exact indel |
 | `analyses/p77_baseline_blocs.py` | deterministic baseline and contribution of each matching step, by removal, for one catalogue |
 | `analyses/p716_intervalles.py` | paired resampling of the two arms, giving the interval of the ratio of two differences |
+| `analyses/p717_figure_gyra94.py` | generates Figure 1 of the manuscript (TikZ source, compiled to a vector PDF by `article/Makefile`) and `results/model/p717_figure_gyra94.tsv`, which holds every value the figure prints; nothing in the figure is typed by hand |
 | `analyses/p716_gyra94.py` | full enumeration of the *gyrA* codon 94 entries of the WHO coordinate file |
 | `analyses/p716_chaines_distinctes.py` | assertion rows against distinct coordinate strings, per type |
 | `analyses/test_p78_chiffres_manuscrit.py` | every figure printed in the manuscript, pinned to the output file that produces it |
 | `catalogue/` | the two catalogues, and `SOURCES.md` on their provenance |
-| `results/` | the measurement outputs the manuscript cites |
-| `article/` | the manuscript, its supplementary material and the three supplementary data files |
+| `results/model/` | the measurement outputs the manuscript cites |
+| `article/` | the manuscript, its supplementary material, the three supplementary data files and `figures/` (Figure 1, source and PDF) |
 
 ## Reproducing
 
@@ -45,12 +46,16 @@ python3 -m venv .venv-ingest && .venv-ingest/bin/pip install -r requirements-ing
 .venv-ingest/bin/python update_database.py --no-fetch      # rebuild the catalogue offline
 python3 analyses/p716_gyra94.py                            # the codon 94 enumeration
 python3 analyses/p716_chaines_distinctes.py                # rows against distinct strings
+python3 analyses/p717_figure_gyra94.py                     # Figure 1, regenerated from the sources
 python3 -m pytest -q analyses/test_p78_chiffres_manuscrit.py
 ```
 
 The last command re-checks every figure of the manuscript against the output files of this
-repository. The two scripts before it need only the WHO coordinate file and the catalogue, both
-addressed below.
+repository. The three scripts before it need only the WHO coordinate file, to be placed at
+`data/sources/who_catalogue/WHO-UCN-TB-2023.7-eng_genomic_coordinates.txt`, and the catalogue;
+the figure script also reads the H37Rv reference genome (NC_000962.3, from NCBI), to be placed at
+`data/fastas/NC_000962.3.fasta`. Run from this repository alone, the figure script regenerates
+`article/figures/fig_gyra94.tex` and its data file byte for byte.
 
 ## Third-party sources, and what is not redistributed here
 

@@ -8,7 +8,7 @@ Objet      : même patron que `test_p75_chiffres_manuscrit.py` (P7.5), appliqué
              Le régime de mesure est la matrice à BLOCS BRUTS (50 782 souches, P7.6/P7.7) : ces chiffres
              ne se comparent pas à ceux de la matrice canonique (85 509 souches, P7.5), qui sont épinglés
              par `test_p75_chiffres_manuscrit.py` et décrivent le manuscrit d'AVANT.
-Entrées    : résultats/model/{p77_C0.tsv, p77_C1.tsv, p77_C0_residuel.tsv, p77_C1_residuel.tsv,
+Entrées    : results/model/{p77_C0.tsv, p77_C1.tsv, p77_C0_residuel.tsv, p77_C1_residuel.tsv,
              p77_catalogues.tsv, p77_conflits_C1.tsv, p77_C0_matriceP76.tsv, p74_angles_morts_blocs_P15.tsv,
              p76_effectifs_blocs.tsv, p78_representations_oms.tsv, p75_effectifs_cohorte.tsv}.
 Sorties    : aucune (code de retour pytest).
@@ -22,7 +22,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-M = Path(__file__).resolve().parent.parent / "résultats" / "model"
+M = Path(__file__).resolve().parent.parent / "results" / "model"
 
 
 def lire(nom):
@@ -118,6 +118,27 @@ def _claims():
            float(g94["variants_a_bloc_cinq_bases"]), 0.5),
           ("ceux sans entrée combinée (Asn, His, Tyr)", 3,
            float(g94["variants_sans_entree_combinee"]), 0.5)]
+
+    # ---- Figure 1 : positions et étendues que la légende imprime (P7.17) ----
+    fig = lire("p717_figure_gyra94.tsv")
+    comb = fig[fig["entree_combinee"] == 1]
+    absentes = fig[fig["statut"] == "absente"]
+    c += [("figure 1, départ des entrées combinées de quatre bases", 7582,
+           float(comb[comb["longueur"] == 4]["position"].unique()[0]), 0.5),
+          ("figure 1, départ des entrées combinées de cinq bases", 7581,
+           float(comb[comb["longueur"] == 5]["position"].unique()[0]), 0.5),
+          ("figure 1, départ des trois lignes absentes", 7581,
+           float(absentes["position"].unique()[0]), 0.5),
+          ("figure 1, étendue des trois lignes absentes", 5,
+           float(absentes["longueur"].unique()[0]), 0.5),
+          ("figure 1, nombre de lignes absentes", 3, float(len(absentes)), 0.5),
+          ("figure 1, souches portant les trois lignes absentes", 740,
+           float(absentes["n_souches_cohorte"].sum()), 0.5),
+          ("figure 1, variants protéiques dessinés", 8,
+           float(fig["variant"].nunique()), 0.5),
+          ("figure 1, représentations du fichier dessinées", 26,
+           float(fig[fig["statut"] == "listee"]["alternatives"]
+                 .map(lambda s: len(str(s).split(";"))).sum()), 0.5)]
 
     # ---- Section 3.2 : les deux fluoroquinolones sous les deux ingestions ----
     for d, nR, nS, ex0, ex1, comp, g0, g0lo, g0hi, g1, g1lo, g1hi, ps0, ps1 in [
@@ -330,3 +351,21 @@ CLAIMS = _claims()
 @pytest.mark.parametrize("nom,imprime,lu,demi_unite", CLAIMS, ids=[x[0] for x in CLAIMS])
 def test_chiffre_imprime(nom, imprime, lu, demi_unite):
     assert abs(imprime - lu) <= demi_unite + 1e-9, f"{nom} : manuscrit {imprime}, TSV {lu}"
+
+
+def test_precision_des_tsv_de_mesure():
+    """P7.16 — Garde-fou contre le défaut qui a imprimé 11,8 au lieu de 11,7 cinq fois.
+
+    Les colonnes de sensibilité et de gain des TSV de mesure sont des FRACTIONS. Écrites à quatre
+    décimales, elles ne gardent que deux décimales utiles une fois lues en POINTS, et un épinglage
+    qui compare l'imprimé à ce TSV déjà arrondi ne peut pas voir l'erreur : il valide l'arrondi de
+    l'arrondi. Ce test vérifie que les scripts qui écrivent ces TSV demandent au moins six décimales.
+    """
+    from pathlib import Path
+    racine = Path(__file__).resolve().parent
+    for nom in ("p77_baseline_blocs.py", "p74_angles_morts.py", "p716_intervalles.py"):
+        src = (racine / nom).read_text(encoding="utf-8")
+        assert 'float_format="%.4f"' not in src, (
+            f"{nom} écrit ses fractions à 4 décimales : en points, cela ne laisse que 2 décimales "
+            "utiles et fabrique un faux arrondi (P7.16). Utiliser %.6f.")
+        assert 'float_format="%.6f"' in src, f"{nom} : float_format attendu à %.6f"

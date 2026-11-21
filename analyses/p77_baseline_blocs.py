@@ -18,8 +18,8 @@ Sorties    : --sortie (TSV long : cible, drug, etat, n_R, n_S, sens, spec, IC, g
 Réutilisable : oui (tout catalogue au schéma de `catalogue_consolide.tsv`, toute matrice de `phase4`).
 Projet     : Resistance_antibio (P7.7)
 Date       : 2026-11-16
-Usage      : python3 analyses/p77_baseline_blocs.py --modeldir résultats/model --catalogue catalogue/X.tsv \
-               --etiquette C1 --sortie résultats/model/p77_C1.tsv
+Usage      : python3 analyses/p77_baseline_blocs.py --modeldir results/model --catalogue catalogue/X.tsv \
+               --etiquette C1 --sortie results/model/p77_C1.tsv
 """
 import argparse
 import sys
@@ -147,7 +147,12 @@ def main():
                                   "perte_spec": float(sp_c[0] - sp[0])})
                 long.append(ligne)
     df = pd.DataFrame(long)
-    df.to_csv(a.sortie, sep="\t", index=False, float_format="%.4f")
+    # P7.16 : %.6f et NON %.4f. Les colonnes de sensibilité et de gain sont des FRACTIONS :
+    # arrondies à 4 décimales, elles ne gardent que 2 décimales utiles une fois lues en POINTS
+    # (0,117472 -> 0,1175 -> 11,75, qui arrondit à 11,8 quand la valeur vaut 11,7). Un chiffre
+    # faux a été imprimé cinq fois dans le manuscrit par ce chemin, et l'épinglage ne pouvait
+    # pas le voir puisqu'il comparait l'imprimé à ce TSV déjà arrondi.
+    df.to_csv(a.sortie, sep="\t", index=False, float_format="%.6f")
     rs = Path(a.sortie).with_name(Path(a.sortie).stem + "_residuel.tsv")
     pd.DataFrame(resid).sort_values(["drug", "n_souches"], ascending=[True, False]).to_csv(rs, sep="\t", index=False)
     with pd.option_context("display.width", 220, "display.max_rows", 500):

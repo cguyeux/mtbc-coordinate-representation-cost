@@ -14,7 +14,7 @@ Projet     : Resistance_antibio (P7.7)
 Date       : 2026-11-16
 Usage      : python3 analyses/p77_comparer_catalogues.py --c0 catalogue/catalogue_consolide.tsv \
                --controle catalogue/p77_v2_defaut.tsv --c1 catalogue/p77_v2_blocs.tsv \
-               --sortie résultats/model/p77_catalogues.tsv
+               --sortie results/model/p77_catalogues.tsv
 """
 import argparse
 import sys

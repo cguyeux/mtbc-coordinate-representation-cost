@@ -177,7 +177,8 @@ agree where they overlap. In that pipeline, reads are aligned to H37Rv with BWA-
 variants are called by snippy, which runs freebayes in diploid-free mode and keeps the calls
 homozygous for the alternative allele above a quality and a depth threshold; Supplementary
 Note~S3 gives the versions, the options and the thresholds. That freebayes assembles adjacent
-substitutions into one haplotype call is why blocks are present in these data at all: the
+substitutions into one haplotype call is why blocks are present in these data at all
+(Figure~\ref{fig:gyra94}A): the
 block question is a property of the caller and of its options, not of the genomes. The matrix built from them holds 50\,782 strains, 41\,551 of
 them carrying at least one measured phenotype among the eleven medicines of
 Table~\ref{tab:medicaments}. Every catalogued determinant is kept as a column whatever its
@@ -283,7 +284,8 @@ estimated for moxifloxacin, which is the content of the resampling and not noise
 depends on the frequency of one sub-lineage marker, Ser95Thr, and the draws resample
 sub-lineages. The ratio is far better determined than either difference, because both follow
 that frequency together and the two arms share the draws; propagated through the same 2\,000
-paired draws it is 77.0\,\% (66.2 to 79.5) and 76.5\,\% (67.7 to 79.7). The cohort fixes how
+paired draws it is 77.0\,\% (66.2 to 79.5) for moxifloxacin and 76.5\,\% (67.7 to 79.7) for
+levofloxacin. The cohort fixes how
 much of the gap the rule accounts for, not how large the gap is.
 
 The sensitivity of the complete baseline is identical under the two ingestions, 0.841 for
@@ -323,8 +325,9 @@ Levofloxacin (2\,358 R) & C1 & 0.682 & 0.799 & 11.7 (6 to 13) & 0.30 \\
 \label{sec:residuel}
 Under the catalogue that emits every representation, exactly three columns of the matrix
 still carry a catalogued determinant only through decomposition, and they account for the
-residual 13.2 and 11.7 points. All three are five-base blocks at \textit{gyrA} codon 94 on
-a Ser95Thr background: \texttt{GACAG}$\rightarrow$\texttt{AACAC} (Asp94Asn, 433 strains),
+residual 13.2 points for moxifloxacin and 11.7 for levofloxacin. All three are five-base blocks at \textit{gyrA} codon 94 on
+a Ser95Thr background (Figure~\ref{fig:gyra94}):
+\texttt{GACAG}$\rightarrow$\texttt{AACAC} (Asp94Asn, 433 strains),
 \texttt{GACAG}$\rightarrow$\texttt{TACAC} (Asp94Tyr, 221 strains) and
 \texttt{GACAG}$\rightarrow$\texttt{CACAC} (Asp94His, 86 strains), 740 strains in all. Among
 the strains they carry that have a moxifloxacin label, 239, 111 and 44 are resistant and 86
@@ -354,6 +357,28 @@ the position and in the form of the three strings above. What is missing for Asp
 Asp94Tyr and Asp94His is therefore not a notation able to express the haplotype, nor a line of
 an unprecedented kind, but three lines of a form the file already carries twice at that very
 position for other amino acids of the same codon: an identity, not an analogy.
+
+\begin{figure}[p]
+\centering
+\includegraphics{figures/fig_gyra94}
+\caption{\textbf{What the caller emits at \textit{gyrA} codons 94 and 95, and what the
+coordinate file lists for the eight protein variants of codon 94.} Positions follow the
+1-based convention of that file; the coordinate strings of this project are 0-based, one
+less. (A)~The reference sequence, the two codons, and the single call the caller emits for a
+strain carrying a codon 94 change on a Ser95Thr background: one block of five bases when the
+first base of the codon changes, of four when the second does, the two substitutions falling
+in one haplotype. (B)~Every representation the file gives, one row per representation, drawn
+over the positions it covers, bases differing from the reference in bold; blue rows are the
+representations that stay inside the codon. Five variants receive an entry combining the
+change with Ser95Thr (green): four bases from 7582 for Gly, Val and Ala, five bases from
+7581 for Phe and Leu; Ala receives two, the second combining with Ser95Ala instead. Three
+variants receive none (orange, dashed); the
+line that is missing would span the positions between the dashed verticals, which is the
+span the file already uses above. Strain counts are the carriers of each block among the
+50\,782. Generated from the coordinate file, the reference genome and the residual table by
+\texttt{analyses/p717\_figure\_gyra94.py}.}
+\label{fig:gyra94}
+\end{figure}
 
 \subsection{The three other representation effects hardly move}
 Table~\ref{tab:medicaments} gives, for each medicine, the contribution of the three steps

@@ -15,7 +15,7 @@ Objet      : le manuscrit A1 écrivait, en quatre endroits dont le résumé, que
              l'ensemble concerné, jamais pour le seul exemple cité).
 Entrées    : data/sources/who_catalogue/WHO-UCN-TB-2023.7-eng_genomic_coordinates.txt (positions
              1-based de la convention VCF), --gene et --codon pour rejouer sur un autre codon.
-Sorties    : résultats/model/p716_gyra94.tsv (une ligne par variant protéique : nombre de
+Sorties    : results/model/p716_gyra94.tsv (une ligne par variant protéique : nombre de
              représentations, longueur du plus long bloc, blocs de 4 bases et plus) et
              `<sortie>_synthese.tsv` (les comptes que le manuscrit imprime).
 Réutilisable : oui (tout gène et tout codon du fichier de coordonnées de l'OMS).
@@ -33,7 +33,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import paths
 
-SORTIE = Path(paths.ROOT) / "résultats" / "model" / "p716_gyra94.tsv"
+SORTIE = Path(paths.ROOT) / "results" / "model" / "p716_gyra94.tsv"
 SOURCE = Path(paths.SRC_WHO) / "WHO-UCN-TB-2023.7-eng_genomic_coordinates.txt"
 TROIS = ("Asn", "His", "Tyr")
 

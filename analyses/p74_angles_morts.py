@@ -21,8 +21,8 @@ Retraits   : mnv       les MNV observés ne sont plus décomposés en SNP (appar
 Incertitude: sensibilité et spécificité : Clopper-Pearson ; gains : rééchantillonnage par grappes de
              sous-lignée (`lineage_code`, 40 grappes), les mêmes tirages pour le complet et le retrait
              (gain apparié), 2 000 tirages, graine fixe.
-Entrées    : résultats/model/{X.npz,features.txt,rows.tsv}, catalogue/catalogue_consolide.tsv.
-Sorties    : résultats/model/p74_angles_morts.tsv (format long), p74_tableau_mesuree.tex (tableau hors
+Entrées    : results/model/{X.npz,features.txt,rows.tsv}, catalogue/catalogue_consolide.tsv.
+Sorties    : results/model/p74_angles_morts.tsv (format long), p74_tableau_mesuree.tex (tableau hors
              PATRIC) et, depuis P8.5, p74_tableau_reference.tex (cible de référence, PATRIC corrigé inclus,
              avec la sensibilité hors PATRIC en dernière colonne).
 Limite     : X.npz date de la construction de `phase4` ; ses colonnes « déterminants rares » sont
@@ -210,7 +210,12 @@ def main():
                          "gain_sens": float(np.mean(gains)), "gain_lo": float(np.min(gains)),
                          "gain_hi": float(np.max(gains))})
     df = pd.DataFrame(long)
-    df.to_csv(MODELDIR / "p74_angles_morts.tsv", sep="\t", index=False, float_format="%.4f")
+    # P7.16 : %.6f et NON %.4f. Les colonnes de sensibilité et de gain sont des FRACTIONS :
+    # arrondies à 4 décimales, elles ne gardent que 2 décimales utiles une fois lues en POINTS
+    # (0,117472 -> 0,1175 -> 11,75, qui arrondit à 11,8 quand la valeur vaut 11,7). Un chiffre
+    # faux a été imprimé cinq fois dans le manuscrit par ce chemin, et l'épinglage ne pouvait
+    # pas le voir puisqu'il comparait l'imprimé à ce TSV déjà arrondi.
+    df.to_csv(MODELDIR / "p74_angles_morts.tsv", sep="\t", index=False, float_format="%.6f")
 
     # effectifs de souches par cible (au moins une étiquette R/S sur les onze médicaments)
     eff = {}

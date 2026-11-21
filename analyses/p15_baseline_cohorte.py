@@ -12,9 +12,9 @@ Objet      : P1.3 a fait passer la cible de 52 496 à 88 017 souches, dont 239 8
              globale qui bouge sans qu'aucune assertion du catalogue ait changé.
              Même logique que `phase5b_cohorte_egale.py` pour les AUC, transposée au baseline
              déterministe : règle du projet, deux chiffres ne se comparent qu'à cohorte contrôlée.
-Entrées    : `résultats/model/{X.npz, features.txt, rows.tsv}`, `catalogue/catalogue_consolide.tsv`,
+Entrées    : `results/model/{X.npz, features.txt, rows.tsv}`, `catalogue/catalogue_consolide.tsv`,
              `--subset` (un identifiant de souche par ligne ; défaut : `rows_avant_P1.5.tsv` s'il existe).
-Sorties    : `résultats/model/p15_baseline_cohorte.tsv` (une ligne par médicament et par ensemble,
+Sorties    : `results/model/p15_baseline_cohorte.tsv` (une ligne par médicament et par ensemble,
              avec n_R, n_S, sensibilité, spécificité, sous les trois cibles de `cible_reference`).
 Réutilisable : oui pour tout découpage de cohorte d'une même matrice (par étude, par pays, par source
              d'étiquette) : `baseline_sur` prend un masque booléen quelconque.

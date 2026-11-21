@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""P5.6 — Cible supervisée de RÉFÉRENCE des rapports de `résultats/model/`.
+"""P5.6 — Cible supervisée de RÉFÉRENCE des rapports de `results/model/`.
 
 Objet      : définir en un seul endroit quelles étiquettes phénotypiques (R/S) entrent dans un
              rapport de résultats, selon la SOURCE retenue au consensus pour chaque paire

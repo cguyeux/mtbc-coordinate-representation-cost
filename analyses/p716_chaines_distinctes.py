@@ -10,7 +10,7 @@ Objet      : le manuscrit A1 écrivait « the ingested catalogue holds 52 041 si
              des chaînes distinctes par type redonne le compte de chaînes distinctes du catalogue.
 Entrées    : --catalogue (TSV au schéma de `catalogue_consolide.tsv` ; défaut : le catalogue vivant).
 Sorties    : --sortie (TSV : type, lignes, chaines_distinctes) ; défaut
-             résultats/model/p716_chaines_distinctes.tsv.
+             results/model/p716_chaines_distinctes.tsv.
 Réutilisable : oui (tout catalogue au même schéma, C0 comme C1).
 Projet     : Resistance_antibio (P7.16)
 Date       : 2026-11-21
@@ -25,7 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import paths
 
-DEFAUT = Path(paths.ROOT) / "résultats" / "model" / "p716_chaines_distinctes.tsv"
+DEFAUT = Path(paths.ROOT) / "results" / "model" / "p716_chaines_distinctes.tsv"
 
 
 def type_de(spdi):

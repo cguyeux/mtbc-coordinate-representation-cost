@@ -10,7 +10,7 @@ Objet      : lors de la réduction du corps d'A1 sous le plafond de la porte de 
                            (gain de la décomposition, en points de sensibilité, par médicament,
                            sous C0 et sous C1).
              Le script écrit deux CSV et deux fragments LaTeX inclus par `article/supplementary.tex`.
-Entrées    : résultats/model/p77_conflits_C1.tsv (séparateur `|`), p77_C0.tsv, p77_C1.tsv
+Entrées    : results/model/p77_conflits_C1.tsv (séparateur `|`), p77_C0.tsv, p77_C1.tsv
              (cible `reference`, état `mnv`, colonne `gain_sens` et son intervalle).
 Sorties    : article/supplementary_materials/TableS1_contradictory_pairs_C1.csv,
              article/supplementary_materials/TableS2_block_decomposition_gain_by_medicine.csv,
@@ -26,7 +26,7 @@ from pathlib import Path
 import pandas as pd
 
 RACINE = Path(__file__).resolve().parent.parent
-M = RACINE / "résultats" / "model"
+M = RACINE / "results" / "model"
 SUPP = RACINE / "article" / "supplementary_materials"
 GEN = RACINE / "article" / "supplementary_generated"
 

@@ -14,7 +14,7 @@ Objet      : les SPDI de tblearn ne sont pas ceux des deux sources anciennes. Me
 Entrées    : voir les sous-commandes (`controles`, `masque`, `valider`) ; les appels anciens viennent de
              `p88_bdd_extrait.tsv.gz` (extraction de bdd/actuelle) ou du pangénome, les appels tblearn de
              `p82_fetch_spdi_tblearn.py`.
-Sorties    : `résultats/model/p88_masque_generation.tsv` (un variant par ligne, avec ses effectifs),
+Sorties    : `results/model/p88_masque_generation.tsv` (un variant par ligne, avec ses effectifs),
              `p88_validation_generation.tsv`.
 Réutilisable : les fonctions `est_mnv`, `composantes`, `canon`, `Conjonctions` valent pour toute référence
              bactérienne dont les SPDI sont `<accession>:<pos>:<ref>:<alt>` ; Python 3.8 (tourne sur `mp`).

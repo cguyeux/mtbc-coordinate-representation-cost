@@ -40,7 +40,7 @@ CATALOGUE_DIR = ROOT / "catalogue"            # LIVRABLE: catalogue mutation->r�
 CATALOGUE_TSV = CATALOGUE_DIR / "catalogue_consolide.tsv"
 PHENOTYPES_TSV = CATALOGUE_DIR / "phenotypes_souches.tsv"  # souche x drogue (long)
 
-RESULTATS = ROOT / "résultats"                # sorties dérivées, caches, figures brutes
+RESULTATS = ROOT / "results"                   # sorties dérivées, caches, figures brutes
 EXPERIMENTS = ROOT / "experiments"
 ARTICLE = ROOT / "article"
 LITREVIEW = ROOT / "litterature_review"

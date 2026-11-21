@@ -1,4 +1,8 @@
-main.pdf: main.tex references.bib
+figures/fig_gyra94.pdf: ../analyses/p717_figure_gyra94.py
+	cd .. && python3 analyses/p717_figure_gyra94.py
+	cd figures && pdflatex -interaction=nonstopmode fig_gyra94.tex
+
+main.pdf: main.tex references.bib figures/fig_gyra94.pdf
 	pdflatex -interaction=nonstopmode main.tex
 	bibtex main
 	pdflatex -interaction=nonstopmode main.tex

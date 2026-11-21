@@ -21,9 +21,9 @@ Sorties    : --sortie (TSV : une ligne par médicament, gains ponctuels et IC de
 Réutilisable : oui (tout couple de catalogues, toute matrice de `phase4`, tout médicament de p74).
 Projet     : Resistance_antibio (P7.16)
 Date       : 2026-11-21
-Usage      : python3 analyses/p716_intervalles.py --modeldir résultats/model \
+Usage      : python3 analyses/p716_intervalles.py --modeldir results/model \
                --catalogue-c0 catalogue/p77_v2_defaut.tsv --catalogue-c1 catalogue/p77_v2_blocs.tsv \
-               --sortie résultats/model/p716_intervalles.tsv
+               --sortie results/model/p716_intervalles.tsv
 """
 import argparse
 import sys
@@ -141,7 +141,12 @@ def main():
               f"({100*np.nanpercentile(ratio,2.5):.1f} a {100*np.nanpercentile(ratio,97.5):.1f})")
 
     df = pd.DataFrame(lignes)
-    df.to_csv(a.sortie, sep="\t", index=False, float_format="%.4f")
+    # P7.16 : %.6f et NON %.4f. Les colonnes de sensibilité et de gain sont des FRACTIONS :
+    # arrondies à 4 décimales, elles ne gardent que 2 décimales utiles une fois lues en POINTS
+    # (0,117472 -> 0,1175 -> 11,75, qui arrondit à 11,8 quand la valeur vaut 11,7). Un chiffre
+    # faux a été imprimé cinq fois dans le manuscrit par ce chemin, et l'épinglage ne pouvait
+    # pas le voir puisqu'il comparait l'imprimé à ce TSV déjà arrondi.
+    df.to_csv(a.sortie, sep="\t", index=False, float_format="%.6f")
     gp = Path(a.sortie).with_name(Path(a.sortie).stem + "_grappes.tsv")
     pd.DataFrame(grappes).to_csv(gp, sep="\t", index=False)
     print(f"\n-> {a.sortie} ; {gp} ({len(grappes)} lignes de comptes par grappe)")

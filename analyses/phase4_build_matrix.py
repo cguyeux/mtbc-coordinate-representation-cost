@@ -6,7 +6,7 @@ Construit, pour les souches ayant à la fois un phénotype (consensus) et des fe
 aux SPDI de fréquence informative (ni ultra-rares, ni fixés partout). Sauve la matrice
 et trois tables alignées sur l'ordre des lignes : souches, phénotypes (large), lignée Coll.
 
-Sorties dans résultats/model/ :
+Sorties dans results/model/ :
   X.npz                 matrice creuse (CSR), souches × SPDI
   features.txt          liste des SPDI (colonnes), dans l'ordre
   rows.tsv              strain_id, lineage_level_1, lineage_code (lignes), + phénotype par drogue
@@ -20,7 +20,7 @@ Option --p88 (P8.8) : reconstruction complète avec la cascade pangénome > bdd/
 représentation CANONIQUE des variants pour toutes les sources (blocs MNV découpés en SNP, MNV du
 catalogue reconstruits par conjonction de leurs composantes ; `p88_generation.py`) et un masque de
 génération (`--masque`) retiré de toutes les souches. `--outdir` écrit ailleurs que dans
-résultats/model (témoins A/B/C de la piste) ; `souches_source_spdi.tsv` dit d'où viennent les
+results/model (témoins A/B/C de la piste) ; `souches_source_spdi.tsv` dit d'où viennent les
 variants de chaque souche. Sans `--tblearn`, c'est le témoin « mêmes souches, mêmes sources, nouvelle
 représentation » qui isole l'effet de la reconstruction de celui des souches ajoutées.
 """

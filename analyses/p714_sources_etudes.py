@@ -14,10 +14,10 @@ Cohorte    : souches de `rows.tsv` (matrice P1.5, 85 509 souches) dont la source
              dépendent pas de la représentation des variants (blocs ou SNP), donc la matrice creuse n'est pas lue.
              Contrôles imprimés : 41 551 souches phénotypées (`p76_effectifs_blocs.tsv`) et n_R, n_S par
              médicament égaux à ceux de `p74_angles_morts_blocs_P15.tsv`, cible `reference`.
-Entrées    : résultats/model/{rows.tsv, souches_source_spdi.tsv, p74_angles_morts_blocs_P15.tsv,
+Entrées    : results/model/{rows.tsv, souches_source_spdi.tsv, p74_angles_morts_blocs_P15.tsv,
              p76_effectifs_blocs.tsv} ; catalogue/{phenotypes_souches.tsv, etudes_ena.tsv} ;
              data/sources/cryptic/cryptic_v3_dst_by_sra.csv.
-Sorties    : résultats/model/p714_sources_par_medicament.tsv (médicament x source de table),
+Sorties    : results/model/p714_sources_par_medicament.tsv (médicament x source de table),
              p714_dst_cryptic_v3.tsv (médicament x source de DST x cohorte, paires issues de CRyPTIC élargi),
              p714_etudes_par_medicament.tsv (médicament x BioProject), p714_synthese.tsv (indicateurs).
 Réutilisable : non (effectifs propres à A1) ; la jointure paire -> source -> BioProject l'est.

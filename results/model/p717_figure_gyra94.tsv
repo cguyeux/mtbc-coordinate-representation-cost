@@ -1,0 +1,23 @@
+famille	variant	position	reference	alternatives	longueur	entree_combinee	n_souches_cohorte	statut
+5_bases_absente	gyrA_p.Asp94Asn	7581	GACAG	AACAC	5	0	433	absente
+5_bases_absente	gyrA_p.Asp94His	7581	GACAG	CACAC	5	0	86	absente
+5_bases_absente	gyrA_p.Asp94Tyr	7581	GACAG	TACAC	5	0	221	absente
+4_bases_listee	gyrA_p.Asp94Ala	7582	ACAG	CCAC;CCGC	4	1		listee
+4_bases_listee	gyrA_p.Asp94Ala	7582	AC	CA;CG;CT	2	0		listee
+4_bases_listee	gyrA_p.Asp94Ala	7582	A	C	1	0		listee
+5_bases_absente	gyrA_p.Asp94Asn	7581	GAC	AAT	3	0		listee
+5_bases_absente	gyrA_p.Asp94Asn	7581	G	A	1	0		listee
+4_bases_listee	gyrA_p.Asp94Gly	7582	ACAG	GCAC	4	1		listee
+4_bases_listee	gyrA_p.Asp94Gly	7582	AC	GG;GT;GA	2	0		listee
+4_bases_listee	gyrA_p.Asp94Gly	7582	A	G	1	0		listee
+5_bases_absente	gyrA_p.Asp94His	7581	GAC	CAT	3	0		listee
+5_bases_absente	gyrA_p.Asp94His	7581	G	C	1	0		listee
+5_bases_listee	gyrA_p.Asp94Leu	7581	GACAG	CTCAC	5	1		listee
+5_bases_listee	gyrA_p.Asp94Phe	7581	GACAG	TTCAC	5	1		listee
+5_bases_listee	gyrA_p.Asp94Phe	7581	GAC	TTT	3	0		listee
+5_bases_listee	gyrA_p.Asp94Phe	7581	GA	TT	2	0		listee
+5_bases_absente	gyrA_p.Asp94Tyr	7581	GAC	TAT	3	0		listee
+5_bases_absente	gyrA_p.Asp94Tyr	7581	G	T	1	0		listee
+4_bases_listee	gyrA_p.Asp94Val	7582	ACAG	TCAC	4	1		listee
+4_bases_listee	gyrA_p.Asp94Val	7582	AC	TA;TT;TG	2	0		listee
+4_bases_listee	gyrA_p.Asp94Val	7582	A	T	1	0		listee

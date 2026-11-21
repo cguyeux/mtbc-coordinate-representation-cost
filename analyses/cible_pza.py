@@ -11,7 +11,7 @@ Objet      : la cible pyrazinamide (PZA) de `rows.tsv` est contaminée par deux 
              10,5 % ailleurs. La règle est posée PAR ÉTUDE et PAR ESPÈCE, jamais par
              « R sans variant pncA » (filtrer sur le génotype pour juger le phénotype
              est circulaire et gonflerait l'AUC).
-Entrées    : résultats/model/rows.tsv (phase4) ; catalogue/exclusions_pza_bioprojects.tsv
+Entrées    : results/model/rows.tsv (phase4) ; catalogue/exclusions_pza_bioprojects.tsv
              (strain_id -> BioProject, produit une fois depuis ENA par `--build-registry`).
 Sorties    : colonnes `pyrazinamide_brut` (valeur d'origine) et `pyrazinamide_motif`
              (raison d'exclusion ou vide) ajoutées à rows.tsv ; `pyrazinamide` vidée
@@ -91,7 +91,7 @@ def main():
     ap.add_argument("--build-registry", action="store_true",
                     help="(re)construit le registre strain_id -> BioProject depuis ENA")
     ap.add_argument("--apply", action="store_true",
-                    help="applique la règle à résultats/model/rows.tsv (idempotent)")
+                    help="applique la règle à results/model/rows.tsv (idempotent)")
     args = ap.parse_args()
 
     rows = pd.read_csv(MODELDIR / "rows.tsv", sep="\t", keep_default_na=False,

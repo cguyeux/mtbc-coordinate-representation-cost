@@ -9,7 +9,7 @@ Objet      : les méthodes d'A1 annoncent « Sensitivity and specificity are giv
              `p74.clopper_pearson`) : ce script les met en table plutôt que de retirer la promesse.
              Les effectifs R vont de 991 (capréomycine) à 13 256 (isoniazide), donc la précision des
              onze sensibilités n'est pas comparable, et c'est ce que la table montre.
-Entrées    : résultats/model/p77_C0.tsv et p77_C1.tsv (cible `reference`, états `complet` et `mnv`).
+Entrées    : results/model/p77_C0.tsv et p77_C1.tsv (cible `reference`, états `complet` et `mnv`).
 Sorties    : article/supplementary_materials/TableS3_clopper_pearson_intervals.csv et
              article/supplementary_generated/tableS3.tex (tabular inclus par `supplementary.tex`).
 Réutilisable : non (propre à A1) ; le patron « TSV -> CSV + fragment LaTeX » vient de p712.
@@ -22,7 +22,7 @@ from pathlib import Path
 import pandas as pd
 
 RACINE = Path(__file__).resolve().parent.parent
-M = RACINE / "résultats" / "model"
+M = RACINE / "results" / "model"
 SUPP = RACINE / "article" / "supplementary_materials"
 GEN = RACINE / "article" / "supplementary_generated"
 
